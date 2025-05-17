@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickServe API - Documentation</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui.css" />
+  <style>
+    html {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+    
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+    
+    body {
+      margin: 0;
+      background: #fafafa;
+    }
+    
+    .swagger-ui .topbar {
+      background-color: #222;
+    }
+    
+    .swagger-ui .topbar .download-url-wrapper .select-label {
+      color: white;
+    }
+    
+    .swagger-ui .info .title {
+      color: #222;
+    }
+    
+    .swagger-ui .scheme-container {
+      background-color: #f8f8f8;
+    }
+    
+    .header {
+      background-color: #222;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+    
+    .header img {
+      height: 40px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    
+    .header h1 {
+      display: inline-block;
+      font-size: 24px;
+      margin: 0;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>QuickServe API Documentation</h1>
+  </div>
+
+  <div id="swagger-ui"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui-bundle.js" charset="UTF-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui-standalone-preset.js" charset="UTF-8"></script>
+  <script>
+    window.onload = function() {
+      // Fonction pour lire le contenu d'un fichier
+      const fetchSpec = async () => {
+        // Si vous servez le fichier directement
+        return {
+          openapi: "3.0.0",
+          info: {
+            title: "QuickServe API",
+            description: "API pour l'application QuickServe de transport et services",
+            version: "1.0.0",
+            contact: {
+              name: "Équipe QuickServe",
+              email: "support@quickserve.com"
+            }
+          },
+          // Le reste de votre spécification OpenAPI
+          // Veuillez remplacer ceci par le contenu complet de votre fichier swagger-docs.json
+        };
+      };
+
+      // Begin Swagger UI call region
+      const ui = SwaggerUIBundle({
+        url: "swagger.json", // URL vers votre fichier de spécification OpenAPI
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+      });
+      // End Swagger UI call region
+
+      window.ui = ui;
+    }
+  </script>
+</body>
+</html>

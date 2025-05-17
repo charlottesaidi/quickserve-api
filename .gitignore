@@ -1,0 +1,6 @@
+.env.local
+/api-gateway/node_modules
+/geolocation-service/node_modules
+/payment-service/node_modules
+/services-service/node_modules
+/users-service/node_modules

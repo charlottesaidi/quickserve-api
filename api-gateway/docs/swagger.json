@@ -1,0 +1,2434 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "QuickServe API",
+    "description": "API pour l'application QuickServe de transport et services",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Équipe QuickServe",
+      "email": "support@quickserve.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Serveur de développement local"
+    },
+    {
+      "url": "https://api.quickserve.com/api",
+      "description": "Serveur de production"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message d'erreur"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant unique de l'utilisateur"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Adresse email de l'utilisateur"
+          },
+          "firstname": {
+            "type": "string",
+            "description": "Prénom de l'utilisateur"
+          },
+          "lastname": {
+            "type": "string",
+            "description": "Nom de l'utilisateur"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "client",
+              "provider",
+              "admin"
+            ],
+            "description": "Rôle de l'utilisateur"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Numéro de téléphone de l'utilisateur"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de création du compte"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Adresse email de l'utilisateur"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "Mot de passe de l'utilisateur"
+          }
+        }
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "password",
+          "firstname",
+          "lastname",
+          "role"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Adresse email de l'utilisateur"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "Mot de passe de l'utilisateur"
+          },
+          "firstname": {
+            "type": "string",
+            "description": "Prénom de l'utilisateur"
+          },
+          "lastname": {
+            "type": "string",
+            "description": "Nom de l'utilisateur"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Numéro de téléphone de l'utilisateur"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "client",
+              "provider"
+            ],
+            "description": "Rôle de l'utilisateur (client ou prestataire)"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message de confirmation"
+          },
+          "token": {
+            "type": "string",
+            "description": "Token JWT d'authentification"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant unique de la catégorie"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nom de la catégorie"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description de la catégorie"
+          },
+          "base_price": {
+            "type": "number",
+            "format": "float",
+            "description": "Prix de base pour cette catégorie de service"
+          },
+          "image_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL de l'image associée à cette catégorie"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Indique si la catégorie est active"
+          }
+        }
+      },
+      "Service": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant unique du service"
+          },
+          "client_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant du client"
+          },
+          "provider_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant du prestataire (null si pas encore assigné)"
+          },
+          "category_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant de la catégorie de service"
+          },
+          "category_name": {
+            "type": "string",
+            "description": "Nom de la catégorie de service"
+          },
+          "title": {
+            "type": "string",
+            "description": "Titre du service"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description détaillée du service"
+          },
+          "address": {
+            "type": "string",
+            "description": "Adresse du service"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "float",
+            "description": "Latitude de l'adresse"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "float",
+            "description": "Longitude de l'adresse"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "assigned",
+              "in_progress",
+              "completed",
+              "cancelled"
+            ],
+            "description": "Statut du service"
+          },
+          "payment_status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "completed",
+              "failed",
+              "cancelled"
+            ],
+            "description": "Statut du paiement"
+          },
+          "payment_amount": {
+            "type": "number",
+            "format": "float",
+            "description": "Montant du paiement"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date planifiée pour le service"
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de complétion du service"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de création de la demande de service"
+          }
+        }
+      },
+      "ServiceCreateRequest": {
+        "type": "object",
+        "required": [
+          "category_id",
+          "title",
+          "address"
+        ],
+        "properties": {
+          "category_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant de la catégorie de service"
+          },
+          "title": {
+            "type": "string",
+            "description": "Titre du service"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description détaillée du service"
+          },
+          "address": {
+            "type": "string",
+            "description": "Adresse du service"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "float",
+            "description": "Latitude de l'adresse"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "float",
+            "description": "Longitude de l'adresse"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date planifiée pour le service"
+          }
+        }
+      },
+      "Rating": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant unique de l'évaluation"
+          },
+          "service_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant du service"
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "Note (de 1 à 5)"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Commentaire"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de création de l'évaluation"
+          }
+        }
+      },
+      "RatingRequest": {
+        "type": "object",
+        "required": [
+          "rating"
+        ],
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "Note (de 1 à 5)"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Commentaire optionnel"
+          }
+        }
+      },
+      "Location": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "format": "float",
+            "description": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "float",
+            "description": "Longitude"
+          },
+          "accuracy": {
+            "type": "number",
+            "format": "float",
+            "description": "Précision en mètres"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de la dernière mise à jour"
+          }
+        }
+      },
+      "PaymentMethod": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant unique de la méthode de paiement"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type de méthode de paiement (ex. card)"
+          },
+          "last_digits": {
+            "type": "string",
+            "description": "Derniers chiffres du numéro de carte"
+          },
+          "expiry_month": {
+            "type": "integer",
+            "description": "Mois d'expiration"
+          },
+          "expiry_year": {
+            "type": "integer",
+            "description": "Année d'expiration"
+          },
+          "card_brand": {
+            "type": "string",
+            "description": "Marque de la carte (ex. Visa, Mastercard)"
+          },
+          "is_default": {
+            "type": "boolean",
+            "description": "Indique si c'est la méthode de paiement par défaut"
+          },
+          "auto_pay": {
+            "type": "boolean",
+            "description": "Indique si le paiement automatique est activé"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date d'ajout de la méthode de paiement"
+          }
+        }
+      },
+      "PaymentIntent": {
+        "type": "object",
+        "properties": {
+          "client_secret": {
+            "type": "string",
+            "description": "Client secret pour l'intention de paiement Stripe"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": [
+          "Authentification"
+        ],
+        "summary": "Créer un compte utilisateur",
+        "description": "Créer un nouveau compte client ou prestataire",
+        "operationId": "registerUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Utilisateur créé avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Utilisateur créé avec succès"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "L'email est déjà utilisé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "Authentification"
+        ],
+        "summary": "Se connecter",
+        "description": "Authentification et récupération d'un token JWT",
+        "operationId": "loginUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Connexion réussie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email ou mot de passe incorrect",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Utilisateurs"
+        ],
+        "summary": "Liste des utilisateurs",
+        "description": "Récupérer la liste de tous les utilisateurs inscrits",
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "description": "Liste des utilisateurs récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/profile": {
+      "get": {
+        "tags": [
+          "Utilisateurs"
+        ],
+        "summary": "Obtenir son profil",
+        "description": "Récupérer les informations du profil de l'utilisateur connecté",
+        "operationId": "getUserProfile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profil récupéré avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Utilisateur non trouvé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Utilisateurs"
+        ],
+        "summary": "Mettre à jour son profil",
+        "description": "Modification des informations du profil de l'utilisateur connecté",
+        "operationId": "updateUserProfile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstname": {
+                    "type": "string",
+                    "description": "Prénom de l'utilisateur"
+                  },
+                  "lastname": {
+                    "type": "string",
+                    "description": "Nom de l'utilisateur"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "Numéro de téléphone de l'utilisateur"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profil mis à jour avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Profil mis à jour avec succès"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Utilisateur non trouvé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "Catégories"
+        ],
+        "summary": "Liste des catégories",
+        "description": "Récupérer la liste de toutes les catégories de services disponibles",
+        "operationId": "getCategories",
+        "responses": {
+          "200": {
+            "description": "Liste des catégories récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Category"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services": {
+      "post": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "Créer un service",
+        "description": "Créer une nouvelle demande de service",
+        "operationId": "createService",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Service créé avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Prestation créée avec succès"
+                    },
+                    "service": {
+                      "$ref": "#/components/schemas/Service"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Catégorie non trouvée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/{id}": {
+      "get": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "Détails d'un service",
+        "description": "Récupérer les informations détaillées d'un service",
+        "operationId": "getServiceDetails",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifiant du service",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Détails du service récupérés avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "service": {
+                      "$ref": "#/components/schemas/Service"
+                    },
+                    "ratings": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Rating"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Accès non autorisé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Service non trouvé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/available": {
+      "get": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "Services disponibles",
+        "description": "Récupérer la liste des services disponibles pour les prestataires",
+        "operationId": "getAvailableServices",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des services disponibles récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "services": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Service"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Accès non autorisé (rôle non prestataire)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/services": {
+      "get": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "Services d'un client",
+        "description": "Récupérer la liste des services demandés par le client connecté",
+        "operationId": "getClientServices",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filtre par statut de service",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "assigned",
+                "in_progress",
+                "completed",
+                "cancelled"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des services récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "services": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Service"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/providers/services": {
+      "get": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "Services d'un prestataire",
+        "description": "Récupérer la liste des services assignés au prestataire connecté",
+        "operationId": "getProviderServices",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filtre par statut de service",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "assigned",
+                "in_progress",
+                "completed",
+                "cancelled"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des services récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "services": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Service"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/{id}/accept": {
+      "post": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "Accepter un service",
+        "description": "Accepter un service disponible (pour prestataires)",
+        "operationId": "acceptService",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifiant du service",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Service accepté avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Prestation acceptée avec succès"
+                    },
+                    "service": {
+                      "$ref": "#/components/schemas/Service"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Service non disponible",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Accès non autorisé (rôle non prestataire)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/{id}/start": {
+      "post": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "Démarrer un service",
+        "description": "Commencer l'exécution d'un service accepté (pour prestataires)",
+        "operationId": "startService",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifiant du service",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Service démarré avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Prestation démarrée avec succès"
+                    },
+                    "service": {
+                      "$ref": "#/components/schemas/Service"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Accès non autorisé ou service non assigné",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/{id}/complete": {
+      "post": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "Terminer un service",
+        "description": "Marquer un service comme terminé (pour prestataires)",
+        "operationId": "completeService",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifiant du service",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Service terminé avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Prestation terminée avec succès"
+                    },
+                    "service": {
+                      "$ref": "#/components/schemas/Service"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Accès non autorisé ou service pas en cours",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/{id}/rate": {
+      "post": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "Évaluer un service",
+        "description": "Donner une note et un commentaire à un service terminé (pour clients)",
+        "operationId": "rateService",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifiant du service",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RatingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Évaluation enregistrée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Évaluation enregistrée avec succès"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides ou service déjà évalué",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Accès non autorisé ou service non terminé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/{id}/cancel": {
+      "post": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "Annuler un service",
+        "description": "Annuler un service (pour clients ou prestataires)",
+        "operationId": "cancelService",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifiant du service",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "description": "Raison de l'annulation"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Service annulé avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Prestation annulée avec succès"
+                    },
+                    "service": {
+                      "$ref": "#/components/schemas/Service"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Le service ne peut pas être annulé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Accès non autorisé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/providers/{id}/location": {
+      "get": {
+        "tags": [
+          "Géolocalisation"
+        ],
+        "summary": "Position d'un prestataire",
+        "description": "Récupérer la dernière position connue d'un prestataire",
+        "operationId": "getProviderLocation",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifiant du prestataire",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Position récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "location": {
+                      "$ref": "#/components/schemas/Location"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Position non trouvée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/providers/nearby": {
+      "get": {
+        "tags": [
+          "Géolocalisation"
+        ],
+        "summary": "Prestataires à proximité",
+        "description": "Trouver les prestataires à proximité d'une position donnée",
+        "operationId": "getNearbyProviders",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "description": "Latitude de la position",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "description": "Longitude de la position",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "description": "Rayon de recherche en kilomètres",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des prestataires à proximité récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "providers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "provider_id": {
+                            "type": "integer",
+                            "format": "int64",
+                            "description": "Identifiant du prestataire"
+                          },
+                          "latitude": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Latitude de la position"
+                          },
+                          "longitude": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Longitude de la position"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Distance en kilomètres"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Date de la dernière mise à jour de la position"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Coordonnées invalides",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/{id}/location-history": {
+      "get": {
+        "tags": [
+          "Géolocalisation"
+        ],
+        "summary": "Historique des positions",
+        "description": "Récupérer l'historique des positions pour un service",
+        "operationId": "getServiceLocationHistory",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifiant du service",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historique récupéré avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "history": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "latitude": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Latitude"
+                          },
+                          "longitude": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Longitude"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Date d'enregistrement de la position"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Accès non autorisé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Service non trouvé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/payment-intents": {
+      "post": {
+        "tags": [
+          "Paiement"
+        ],
+        "summary": "Créer une intention de paiement",
+        "description": "Créer une intention de paiement pour un service",
+        "operationId": "createPaymentIntent",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "service_id"
+                ],
+                "properties": {
+                  "service_id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Identifiant du service à payer"
+                  },
+                  "payment_method_id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Identifiant de la méthode de paiement (optionnel)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Intention de paiement créée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentIntent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides ou service déjà payé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": null,
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          },
+          "403": {
+            "description": "Accès non autorisé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/confirm": {
+      "post": {
+        "tags": [
+          "Paiement"
+        ],
+        "summary": "Confirmer un paiement",
+        "description": "Confirmer un paiement après succès de l'opération chez Stripe",
+        "operationId": "confirmPayment",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "payment_intent_id"
+                ],
+                "properties": {
+                  "payment_intent_id": {
+                    "type": "string",
+                    "description": "Identifiant de l'intention de paiement Stripe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Paiement confirmé avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Paiement confirmé avec succès"
+                    },
+                    "payment_id": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "Identifiant du paiement"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Paiement non validé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Accès non autorisé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Paiement non trouvé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/payment-methods": {
+      "post": {
+        "tags": [
+          "Paiement"
+        ],
+        "summary": "Ajouter une méthode de paiement",
+        "description": "Ajouter une nouvelle méthode de paiement pour le client",
+        "operationId": "addPaymentMethod",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "payment_method_id"
+                ],
+                "properties": {
+                  "payment_method_id": {
+                    "type": "string",
+                    "description": "Identifiant de la méthode de paiement Stripe"
+                  },
+                  "set_default": {
+                    "type": "boolean",
+                    "description": "Définir comme méthode par défaut",
+                    "default": false
+                  },
+                  "auto_pay": {
+                    "type": "boolean",
+                    "description": "Autoriser les paiements automatiques",
+                    "default": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Méthode de paiement ajoutée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Méthode de paiement ajoutée avec succès"
+                    },
+                    "payment_method_id": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "Identifiant de la méthode de paiement"
+                    },
+                    "is_default": {
+                      "type": "boolean",
+                      "description": "Indique si c'est la méthode par défaut"
+                    },
+                    "auto_pay": {
+                      "type": "boolean",
+                      "description": "Indique si le paiement automatique est activé"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Paiement"
+        ],
+        "summary": "Liste des méthodes de paiement",
+        "description": "Récupérer la liste des méthodes de paiement du client",
+        "operationId": "getPaymentMethods",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des méthodes de paiement récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "payment_methods": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PaymentMethod"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/payment-methods/{id}": {
+      "delete": {
+        "tags": [
+          "Paiement"
+        ],
+        "summary": "Supprimer une méthode de paiement",
+        "description": "Supprimer une méthode de paiement existante",
+        "operationId": "deletePaymentMethod",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifiant de la méthode de paiement",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Méthode de paiement supprimée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Méthode de paiement supprimée avec succès"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Méthode de paiement non trouvée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/payment-methods/{id}/set-default": {
+      "post": {
+        "tags": [
+          "Paiement"
+        ],
+        "summary": "Définir une méthode de paiement par défaut",
+        "description": "Définir une méthode de paiement comme méthode par défaut",
+        "operationId": "setDefaultPaymentMethod",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifiant de la méthode de paiement",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Méthode de paiement définie par défaut avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Méthode de paiement définie par défaut avec succès"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Méthode de paiement non trouvée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/history": {
+      "get": {
+        "tags": [
+          "Paiement"
+        ],
+        "summary": "Historique des paiements",
+        "description": "Récupérer l'historique des paiements du client",
+        "operationId": "getPaymentHistory",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historique des paiements récupéré avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "payments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "format": "int64",
+                            "description": "Identifiant du paiement"
+                          },
+                          "service_id": {
+                            "type": "integer",
+                            "format": "int64",
+                            "description": "Identifiant du service associé"
+                          },
+                          "service_title": {
+                            "type": "string",
+                            "description": "Titre du service"
+                          },
+                          "amount": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Montant du paiement"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "pending",
+                              "completed",
+                              "failed",
+                              "cancelled"
+                            ],
+                            "description": "Statut du paiement"
+                          },
+                          "payment_method": {
+                            "type": "string",
+                            "description": "Méthode de paiement utilisée"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Date de création du paiement"
+                          },
+                          "processed_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Date de traitement du paiement"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "Système"
+        ],
+        "summary": "État de santé de l'API Gateway",
+        "description": "Vérifier l'état de santé de l'API Gateway",
+        "operationId": "getGatewayHealth",
+        "responses": {
+          "200": {
+            "description": "État de l'API Gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "ok"
+                      ],
+                      "example": "ok"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Horodatage de la vérification"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "tags": [
+          "Système"
+        ],
+        "summary": "État de santé des services",
+        "description": "Vérifier l'état de santé de tous les microservices",
+        "operationId": "getServicesHealth",
+        "responses": {
+          "200": {
+            "description": "État de tous les services",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "gateway": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "ok"
+                          ],
+                          "example": "ok"
+                        }
+                      }
+                    },
+                    "services": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "ok",
+                                "error"
+                              ],
+                              "example": "ok"
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "example": 200
+                            }
+                          }
+                        },
+                        "geolocation": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "ok",
+                                "error"
+                              ],
+                              "example": "ok"
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "example": 200
+                            }
+                          }
+                        },
+                        "services": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "ok",
+                                "error"
+                              ],
+                              "example": "ok"
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "example": 200
+                            }
+                          }
+                        },
+                        "payments": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "ok",
+                                "error"
+                              ],
+                              "example": "ok"
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "example": 200
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}

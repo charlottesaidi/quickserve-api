@@ -1,0 +1,151 @@
+version: '3.8'
+
+services:
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - USERS_SERVICE_URL=http://users-service:3001
+      - GEOLOCATION_SERVICE_URL=http://geolocation-service:3002
+      - SERVICES_SERVICE_URL=http://services-service:3003
+      - PAYMENT_SERVICE_URL=http://payment-service:3004
+    env_file:
+      - .env
+    depends_on:
+      - users-service
+      - geolocation-service
+      - services-service
+      - payment-service
+    networks:
+      - quickserve-network
+    restart: always
+
+  # Service Utilisateurs
+  users-service:
+    build: ./users-service
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=quickserve_users
+      - DB_PORT=5432
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - quickserve-network
+    restart: always
+
+  # Service Géolocalisation
+  geolocation-service:
+    build: ./geolocation-service
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=quickserve_geolocation
+      - DB_PORT=5432
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - quickserve-network
+    restart: always
+
+  # Service Prestations
+  services-service:
+    build: ./services-service
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=quickserve_services
+      - DB_PORT=5432
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - quickserve-network
+    restart: always
+
+  # Service Paiement
+  payment-service:
+    build: ./payment-service
+    ports:
+      - "3004:3004"
+    environment:
+      - PORT=3004
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=quickserve_payments
+      - DB_PORT=5432
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - quickserve-network
+    restart: always
+
+  # Base de données PostgreSQL
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_MULTIPLE_DATABASES=quickserve_users,quickserve_geolocation,quickserve_services,quickserve_payments
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    networks:
+      - quickserve-network
+    restart: always
+
+  # RabbitMQ (Event Bus)
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - quickserve-network
+    restart: always
+
+networks:
+  quickserve-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  rabbitmq-data:
