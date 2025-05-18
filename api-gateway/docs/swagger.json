@@ -953,7 +953,7 @@
         }
       }
     },
-    "/clients/services": {
+    "/services/clients/services": {
       "get": {
         "tags": [
           "Services"
@@ -1016,7 +1016,7 @@
         }
       }
     },
-    "/providers/services": {
+    "/services/providers/services": {
       "get": {
         "tags": [
           "Services"
@@ -1471,7 +1471,7 @@
         }
       }
     },
-    "/providers/{id}/location": {
+    "/geolocation/providers/{id}/location": {
       "get": {
         "tags": [
           "Géolocalisation"
@@ -1535,7 +1535,7 @@
         }
       }
     },
-    "/providers/nearby": {
+    "/geolocation/providers/nearby": {
       "get": {
         "tags": [
           "Géolocalisation"
@@ -1650,7 +1650,7 @@
         }
       }
     },
-    "/services/{id}/location-history": {
+    "/geolocation/services/{id}/location-history": {
       "get": {
         "tags": [
           "Géolocalisation"

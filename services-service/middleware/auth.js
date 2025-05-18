@@ -14,7 +14,8 @@ function authenticateToken(req, res, next) {
     next();
   } catch (error) {
     logger.error('Token d\'authentification invalide:', error);
-    return res.status(403).json({ message: 'Token invalide' });
+    return next(error)
+    // return res.status(403).json({ message: 'Token invalide' });
   }
 }
 

@@ -1,4 +1,5 @@
 const ServiceModel = require('../models/serviceModel');
+const CategoryModel = require('../models/categoryModel');
 
 // Contrôleur pour les prestations de services
 class ServiceController {
@@ -15,7 +16,7 @@ class ServiceController {
       } = req.body;
       
       // Vérifier si la catégorie existe
-      const category = await ServiceCategoryModel.getCategoryById(category_id);
+      const category = await CategoryModel.getCategoryById(category_id);
       
       if (!category) {
         return res.status(404).json({ message: 'Catégorie non trouvée' });
