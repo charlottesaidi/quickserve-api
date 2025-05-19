@@ -2,6 +2,39 @@ const { pool } = require('../config/database');
 const logger = require('../utils/logger');
 
 class CategoryModel {
+  async createCategory(categoryData) {
+    try {
+      const { 
+        name, 
+        description, 
+        base_price, 
+        image_url, 
+        active 
+      } = categoryData;
+      
+      const result = await pool.query(
+        `INSERT INTO service_categories 
+         (name, description, base_price, image_url, active)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        [
+          name,
+          description,
+          base_price,
+          image_url,
+          active
+        ]
+      );
+      
+      const category = result.rows[0];
+      
+      return category;
+    } catch (error) {
+      logger.error('Erreur lors de la création de la catégorie de prestation:', error);
+      throw error;
+    }
+  }
+
   // Récupérer toutes les catégories actives
   async getAllCategories() {
     try {

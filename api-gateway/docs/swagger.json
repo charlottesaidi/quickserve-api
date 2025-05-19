@@ -321,6 +321,32 @@
           }
         }
       },
+      "CategoryCreateRequest": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Titre de la catégorie de service"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description détaillée de la catégorie de service"
+          },
+          "base_price": {
+            "type": "number",
+            "format": "float",
+            "description": "Prix de base pour cette catégorie de service"
+          },
+          "image_url": {
+            "type": "string",
+            "format": "float",
+            "description": "URL de l'image associée à cette catégorie"
+          }
+        }
+      },
       "Rating": {
         "type": "object",
         "properties": {
@@ -867,6 +893,72 @@
           },
           "404": {
             "description": "Catégorie non trouvée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/categories": {
+      "post": {
+        "tags": [
+          "Catégories"
+        ],
+        "summary": "Créer une catégorie de service",
+        "description": "Créer une nouvelle catégorie de service",
+        "operationId": "createService",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Catégorie créé avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Catégorie créée avec succès"
+                    },
+                    "service": {
+                      "$ref": "#/components/schemas/Category"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
             "content": {
               "application/json": {
                 "schema": {

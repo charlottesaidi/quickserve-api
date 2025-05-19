@@ -9,6 +9,35 @@ class CategoryController {
             next(error);
         }
     } 
+
+    async createCategory(req, res, next) {
+        try {
+        const { 
+            name, 
+            description, 
+            base_price, 
+            image_url, 
+        } = req.body;
+        
+        // Créer la prestation
+        const categoryData = {
+            name,
+            description,
+            base_price,
+            image_url,
+            active: true
+        };
+        
+        const category = await CategoryModel.createCategory(categoryData);
+        
+        res.status(201).json({
+            message: 'Catégorie de prestation créée avec succès',
+            category
+        });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = new CategoryController();
