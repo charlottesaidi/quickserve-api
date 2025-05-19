@@ -5,7 +5,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  run_example_job:
+  deploy_on_server:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -19,7 +19,7 @@ jobs:
     - name: connect to server via ssh and deploy
       run: |
         ssh -p 22 siralex@${{ secrets.SSH_HOST }} '
-            cd /chemin/vers/votre/projet &&
+            cd /home/siralex/quickserve-api/ &&
             echo "toto"
             # git pull &&
             # docker-compose up -d
