@@ -13,8 +13,8 @@ function validateRegister(req, res, next) {
   }
   
   // Validation du rôle
-  if (!['client', 'provider'].includes(role)) {
-    return res.status(400).json({ message: 'Rôle invalide, doit être "client" ou "provider"' });
+  if (!['client', 'provider', 'admin'].includes(role)) {
+    return res.status(400).json({ message: 'Rôle invalide, doit être "client", "provider" ou "admin' });
   }
   
   next();
