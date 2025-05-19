@@ -20,7 +20,6 @@ jobs:
       run: |
         ssh -p 22 siralex@${{ secrets.SSH_HOST }} '
             cd /home/siralex/quickserve-api/ &&
-            echo "toto"
-            # git pull &&
-            # docker-compose up -d
+            git pull &&
+            docker-compose up -d
           '
