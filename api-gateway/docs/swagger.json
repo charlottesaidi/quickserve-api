@@ -712,6 +712,66 @@
         }
       }
     },
+    "/providers": {
+      "get": {
+        "tags": [
+          "Utilisateurs"
+        ],
+        "summary": "Liste des prestataires",
+        "description": "Récupérer la liste de tous les prestataires inscrits",
+        "operationId": "getProviders",
+        "responses": {
+          "200": {
+            "description": "Liste des prestataires récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients": {
+      "get": {
+        "tags": [
+          "Utilisateurs"
+        ],
+        "summary": "Liste des clients",
+        "description": "Récupérer la liste de tous les clients inscrits",
+        "operationId": "getClients",
+        "responses": {
+          "200": {
+            "description": "Liste des clients récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/categories": {
       "get": {
         "tags": [

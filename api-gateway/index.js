@@ -142,6 +142,18 @@ app.use('/api/users/register', createProxyMiddleware({
   pathRewrite: { '^/api/users/register': '/register' }
 }));
 
+app.use('/api/providers', createProxyMiddleware({ 
+  target: services.users.url,
+  changeOrigin: true,
+  pathRewrite: { '^/api/providers': '/providers' }
+}));
+
+app.use('/api/clients', createProxyMiddleware({ 
+  target: services.users.url,
+  changeOrigin: true,
+  pathRewrite: { '^/api/clients': '/clients' }
+}));
+
 // Service prestations - routes spécifiques
 app.use('/api/categories', createProxyMiddleware({ 
   target: services.services.url,

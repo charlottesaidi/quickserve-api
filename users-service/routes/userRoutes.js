@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-const { authenticateToken } = require('../middleware/auth');
+const providerController = require('../controllers/providerController');
+const clientController = require('../controllers/clientController');
+const { authenticateToken, checkRole } = require('../middleware/auth');
 const { validateRegister, validateLogin, validateProfileUpdate } = require('../middleware/validation');
 
 // Routes publiques
@@ -12,6 +14,8 @@ router.post('/login', validateLogin, userController.login);
 router.get('/', authenticateToken, userController.getAllUsers);
 router.get('/profile', authenticateToken, userController.getProfile);
 router.put('/profile', authenticateToken, validateProfileUpdate, userController.updateProfile);
+router.get('/providers', authenticateToken, checkRole('client'), providerController.getAllProviders);
+router.get('/clients', authenticateToken, checkRole('provider'), clientController.getAllClients);
 
 // Route de santé
 router.get('/health', (req, res) => {
