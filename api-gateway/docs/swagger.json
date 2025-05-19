@@ -125,6 +125,10 @@
             "type": "string",
             "description": "Nom de l'utilisateur"
           },
+          "phone_number": {
+            "type": "string",
+            "description": "Numéro de téléphone de l'utilisateur"
+          },
           "role": {
             "type": "string",
             "enum": [
