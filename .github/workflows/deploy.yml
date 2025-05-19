@@ -19,6 +19,6 @@ jobs:
     - name: connect to server via ssh
       run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}
     - name: find working directory
-      run: cd /home/siralex/quickserve-api/
+      run: cd /home/${{ secrets.SSH_USERNAME }}/quickserve-api/
     - name: pull remote git changes
       run: echo "toto"
