@@ -16,8 +16,8 @@ class UserModel {
     
     // Création de l'utilisateur
     const result = await pool.query(
-      'INSERT INTO users (email, password, firstname, lastname, phone_number, role) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, email, firstname, lastname, role',
-      [email, hashedPassword, firstname, lastname, phone_number, role]
+      'INSERT INTO users (email, password, firstname, lastname, role) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, email, firstname, lastname, role',
+      [email, hashedPassword, firstname, lastname, role]
     );
     
     return result.rows[0];
