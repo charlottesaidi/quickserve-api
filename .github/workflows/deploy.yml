@@ -18,6 +18,9 @@ jobs:
       run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
     - name: connect to server via ssh and deploy
       run: |
-        ssh siralex@${{ secrets.SSH_HOST }}
-        cd /home/siralex/quickserve-api/
-        echo "toto"
+        ssh -p 22 siralex@${{ secrets.SSH_HOST }} '
+            cd /chemin/vers/votre/projet &&
+            echo "toto"
+            # git pull &&
+            # docker-compose up -d
+          '
