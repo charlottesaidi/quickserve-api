@@ -54,16 +54,6 @@ async function initializeDatabase() {
         FOREIGN KEY (service_id) REFERENCES services(id)
       );
       
-      -- Créer quelques catégories par défaut si elles n'existent pas
-      INSERT INTO service_categories (name, description, base_price, image_url)
-      VALUES 
-        ('Livraison Express', 'Livraison rapide de colis et documents', 15.00, 'https://example.com/delivery.jpg'),
-        ('Transport de personnes', 'Transport de personnes d''un point à un autre', 20.00, 'https://example.com/transport.jpg'),
-        ('Transport de meubles', 'Transport de meubles et gros objets', 50.00, 'https://example.com/furniture.jpg'),
-        ('Déménagement', 'Service complet de déménagement', 200.00, 'https://example.com/moving.jpg'),
-        ('Courses & Achats', 'Service d''achat et livraison de courses', 25.00, 'https://example.com/shopping.jpg')
-      ON CONFLICT DO NOTHING;
-      
       CREATE INDEX IF NOT EXISTS idx_services_client ON services (client_id);
       CREATE INDEX IF NOT EXISTS idx_services_provider ON services (provider_id);
       CREATE INDEX IF NOT EXISTS idx_services_status ON services (status);
