@@ -11,7 +11,7 @@ class PaymentController {
       const paymentIntent = await paymentService.createPaymentIntent(
         serviceId,
         clientId,
-        paymentMethodId
+        paymentMethodId,
       );
       
       res.status(200).json(paymentIntent);
@@ -30,7 +30,7 @@ class PaymentController {
       
       res.status(200).json({
         message: 'Paiement confirmé avec succès',
-        payment_id: payment.id
+        payment_id: payment.id,
       });
     } catch (error) {
       logger.error('Erreur lors de la confirmation du paiement:', error);

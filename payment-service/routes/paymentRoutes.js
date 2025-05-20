@@ -6,7 +6,7 @@ const { authenticateToken } = require('../middleware/auth');
 const { 
   validatePaymentIntentRequest, 
   validatePaymentConfirmation,
-  validatePaymentMethodCreate
+  validatePaymentMethodCreate,
 } = require('../middleware/validation');
 const stripeWebhook = require('../webhooks/stripeWebhook');
 
@@ -15,20 +15,20 @@ router.post(
   '/payment-intents',
   authenticateToken,
   validatePaymentIntentRequest,
-  paymentController.createPaymentIntent
+  paymentController.createPaymentIntent,
 );
 
 router.post(
   '/confirm',
   authenticateToken,
   validatePaymentConfirmation,
-  paymentController.confirmPayment
+  paymentController.confirmPayment,
 );
 
 router.get(
   '/history',
   authenticateToken,
-  paymentController.getPaymentHistory
+  paymentController.getPaymentHistory,
 );
 
 // Routes de méthodes de paiement
@@ -36,25 +36,25 @@ router.post(
   '/payment-methods',
   authenticateToken,
   validatePaymentMethodCreate,
-  paymentMethodController.addPaymentMethod
+  paymentMethodController.addPaymentMethod,
 );
 
 router.get(
   '/payment-methods',
   authenticateToken,
-  paymentMethodController.getPaymentMethods
+  paymentMethodController.getPaymentMethods,
 );
 
 router.delete(
   '/payment-methods/:id',
   authenticateToken,
-  paymentMethodController.deletePaymentMethod
+  paymentMethodController.deletePaymentMethod,
 );
 
 router.post(
   '/payment-methods/:id/set-default',
   authenticateToken,
-  paymentMethodController.setDefaultPaymentMethod
+  paymentMethodController.setDefaultPaymentMethod,
 );
 
 // Webhook Stripe

@@ -42,7 +42,7 @@ class PaymentUtils {
       'pending': 'En attente',
       'completed': 'Payé',
       'failed': 'Échoué',
-      'cancelled': 'Annulé'
+      'cancelled': 'Annulé',
     };
     
     return statusDescriptions[status] || status;

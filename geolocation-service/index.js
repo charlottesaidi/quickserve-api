@@ -6,6 +6,7 @@ const locationModel = require('./models/locationModel');
 const historyModel = require('./models/historyModel');
 const eventService = require('./services/eventService');
 const socketService = require('./services/socketService');
+const locationService = require('./services/locationService');
 const { initializeSocket } = require('./config/socket');
 const logger = require('./utils/logger');
 const { PORT } = require('./config/env');
@@ -58,7 +59,7 @@ async function initializeApp() {
             latitude: parseFloat(latitude),
             longitude: parseFloat(longitude),
             accuracy: accuracy ? parseFloat(accuracy) : null,
-            service_id: service_id ? parseInt(service_id, 10) : null
+            service_id: service_id ? parseInt(service_id, 10) : null,
           };
           
           await locationService.updateProviderLocation(socket.userId, locationData);
@@ -76,7 +77,7 @@ async function initializeApp() {
     });
   } catch (error) {
     logger.error('Erreur lors de l\'initialisation de l\'application:', error);
-    process.exit(1);
+    throw error;
   }
 }
 
@@ -87,7 +88,7 @@ process.on('uncaughtException', (error) => {
   logger.error('Erreur non capturée:', error);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason) => {
   logger.error('Promesse rejetée non gérée:', reason);
 });
 

@@ -9,7 +9,7 @@ class GeoUtils {
    * @returns {number} - Distance en kilomètres
    */
   static calculateDistance(lat1, lon1, lat2, lon2) {
-    if ([lat1, lon1, lat2, lon2].some(coord => typeof coord !== 'number')) {
+    if ([lat1, lon1, lat2, lon2].some((coord) => typeof coord !== 'number')) {
       throw new Error('Tous les paramètres doivent être des nombres');
     }
     
@@ -17,16 +17,16 @@ class GeoUtils {
     const dLat = this.toRad(lat2 - lat1);
     const dLon = this.toRad(lon2 - lon1);
     const a = 
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(this.toRad(lat1)) * Math.cos(this.toRad(lat2)) * 
-      Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     
     return distance;
   }
 
- /**
+  /**
    * Convertit des degrés en radians
    * @param {number} degrees - Angle en degrés
    * @returns {number} - Angle en radians
@@ -63,13 +63,13 @@ class GeoUtils {
     const lon1 = this.toRad(longitude);
     
     const lat2 = Math.asin(
-      Math.sin(lat1) * Math.cos(distance/R) + 
-      Math.cos(lat1) * Math.sin(distance/R) * Math.cos(brng)
+      Math.sin(lat1) * Math.cos(distance / R) + 
+      Math.cos(lat1) * Math.sin(distance / R) * Math.cos(brng),
     );
     
     const lon2 = lon1 + Math.atan2(
-      Math.sin(brng) * Math.sin(distance/R) * Math.cos(lat1),
-      Math.cos(distance/R) - Math.sin(lat1) * Math.sin(lat2)
+      Math.sin(brng) * Math.sin(distance / R) * Math.cos(lat1),
+      Math.cos(distance / R) - Math.sin(lat1) * Math.sin(lat2),
     );
     
     // Convertir en degrés

@@ -12,14 +12,14 @@ const healthService = {
         const timeoutId = setTimeout(() => controller.abort(), 5000); // Timeout après 5 secondes
         
         const response = await fetch(`${url}/health`, { 
-          signal: controller.signal 
+          signal: controller.signal, 
         });
         
         clearTimeout(timeoutId);
         
         servicesHealth[service] = {
           status: response.ok ? 'ok' : 'error',
-          statusCode: response.status
+          statusCode: response.status,
         };
         
         // Si la réponse est OK, essayer de récupérer les détails
@@ -35,7 +35,7 @@ const healthService = {
         logger.error(`Erreur lors de la vérification du service ${service}:`, error);
         servicesHealth[service] = {
           status: 'error',
-          message: error.name === 'AbortError' ? 'Timeout' : error.message
+          message: error.name === 'AbortError' ? 'Timeout' : error.message,
         };
       }
     });
@@ -44,7 +44,7 @@ const healthService = {
     await Promise.allSettled(servicePromises);
     
     return servicesHealth;
-  }
+  },
 };
 
 module.exports = healthService;

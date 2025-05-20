@@ -1,5 +1,4 @@
 const { pool } = require('../config/database');
-const { publishEvent } = require('../config/rabbitmq');
 const logger = require('../utils/logger');
 
 class ServiceRatingModel {
@@ -8,7 +7,7 @@ class ServiceRatingModel {
     try {
       const result = await pool.query(
         'SELECT * FROM service_ratings WHERE service_id = $1',
-        [serviceId]
+        [serviceId],
       );
       return result.rows;
     } catch (error) {
@@ -23,7 +22,7 @@ class ServiceRatingModel {
       // Vérifier si une évaluation existe déjà
       const ratingCheck = await pool.query(
         'SELECT * FROM service_ratings WHERE service_id = $1',
-        [serviceId]
+        [serviceId],
       );
       
       if (ratingCheck.rows.length > 0) {
@@ -38,7 +37,7 @@ class ServiceRatingModel {
       // Enregistrer l'évaluation
       const result = await pool.query(
         'INSERT INTO service_ratings (service_id, rating, comment) VALUES ($1, $2, $3) RETURNING *',
-        [serviceId, rating, comment]
+        [serviceId, rating, comment],
       );
       
       return result.rows[0];

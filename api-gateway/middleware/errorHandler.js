@@ -1,7 +1,7 @@
 const logger = require('../utils/logger');
 
 // Middleware de gestion des erreurs
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res) {
   // Log de l'erreur
   logger.error({
     message: 'Erreur non gérée',
@@ -9,7 +9,7 @@ function errorHandler(err, req, res, next) {
     stack: err.stack,
     path: req.path,
     method: req.method,
-    ip: req.ip
+    ip: req.ip,
   });
 
   // Déterminer le code de statut approprié
@@ -18,7 +18,7 @@ function errorHandler(err, req, res, next) {
   // Répondre avec un message d'erreur, en masquant les détails en production
   res.status(statusCode).json({
     message: err.message || 'Erreur serveur',
-    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack
+    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
   });
 }
 

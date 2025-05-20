@@ -12,9 +12,9 @@ function setupProxyRoutes(app, services) {
       target: url,
       changeOrigin: true,
       pathRewrite: {
-        [`^${path}`]: ''
+        [`^${path}`]: '',
       },
-      onProxyReq: (proxyReq, req, res) => {
+      onProxyReq: (proxyReq, req) => {
         // Transmettre les infos d'utilisateur si existantes
         if (req.user) {
           proxyReq.setHeader('X-User-Id', req.user.id);
@@ -33,7 +33,7 @@ function setupProxyRoutes(app, services) {
         logger.error(`Erreur de proxy vers ${service}:`, err);
         res.status(500).json({ message: `Service ${service} indisponible` });
       },
-      logProvider: () => logger
+      logProvider: () => logger,
     };
     
     // Créer le proxy pour ce service
@@ -45,32 +45,32 @@ function setupProxyRoutes(app, services) {
   app.use('/api/users/login', createProxyMiddleware({ 
     target: services.users.url,
     changeOrigin: true,
-    pathRewrite: { '^/api/users/login': '/login' }
+    pathRewrite: { '^/api/users/login': '/login' },
   }));
   
   app.use('/api/users/register', createProxyMiddleware({ 
     target: services.users.url,
     changeOrigin: true,
-    pathRewrite: { '^/api/users/register': '/register' }
+    pathRewrite: { '^/api/users/register': '/register' },
   }));
   
   app.use('/api/providers', createProxyMiddleware({ 
     target: services.users.url,
     changeOrigin: true,
-    pathRewrite: { '^/api/providers': '/providers' }
+    pathRewrite: { '^/api/providers': '/providers' },
   }));
   
   app.use('/api/clients', createProxyMiddleware({ 
     target: services.users.url,
     changeOrigin: true,
-    pathRewrite: { '^/api/clients': '/clients' }
+    pathRewrite: { '^/api/clients': '/clients' },
   }));
   
   // Configuration des routes spécifiques pour le service prestations
   app.use('/api/categories', createProxyMiddleware({ 
     target: services.services.url,
     changeOrigin: true,
-    pathRewrite: { '^/api/categories': '/categories' }
+    pathRewrite: { '^/api/categories': '/categories' },
   }));
   
   logger.info('Routes de proxy configurées');

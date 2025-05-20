@@ -30,7 +30,7 @@ async function initializeApp() {
     });
   } catch (error) {
     logger.error('Erreur lors de l\'initialisation de l\'application:', error);
-    process.exit(1);
+    throw error;
   }
 }
 
@@ -41,7 +41,7 @@ process.on('uncaughtException', (error) => {
   logger.error('Erreur non capturée:', error);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason) => {
   logger.error('Promesse rejetée non gérée:', reason);
 });
 

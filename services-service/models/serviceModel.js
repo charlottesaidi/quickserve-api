@@ -16,7 +16,7 @@ class ServiceModel {
         latitude, 
         longitude, 
         payment_amount, 
-        scheduled_at 
+        scheduled_at, 
       } = serviceData;
       
       const result = await pool.query(
@@ -35,8 +35,8 @@ class ServiceModel {
           'pending',
           'pending',
           payment_amount,
-          scheduled_at ? new Date(scheduled_at) : null
-        ]
+          scheduled_at ? new Date(scheduled_at) : null,
+        ],
       );
       
       const service = result.rows[0];
@@ -48,8 +48,8 @@ class ServiceModel {
           service_id: service.id,
           client_id: service.client_id,
           category_id: service.category_id,
-          amount: service.payment_amount
-        }
+          amount: service.payment_amount,
+        },
       });
       
       return service;
@@ -153,7 +153,7 @@ class ServiceModel {
       // Vérifier si la prestation est disponible
       const checkResult = await pool.query(
         'SELECT * FROM services WHERE id = $1 AND status = $2 AND provider_id IS NULL',
-        [serviceId, 'pending']
+        [serviceId, 'pending'],
       );
       
       if (checkResult.rows.length === 0) {
@@ -163,7 +163,7 @@ class ServiceModel {
       // Affecter la prestation au prestataire
       const updateResult = await pool.query(
         'UPDATE services SET provider_id = $1, status = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *',
-        [providerId, 'assigned', serviceId]
+        [providerId, 'assigned', serviceId],
       );
       
       const service = updateResult.rows[0];
@@ -174,8 +174,8 @@ class ServiceModel {
         data: { 
           service_id: service.id,
           client_id: service.client_id,
-          provider_id: service.provider_id
-        }
+          provider_id: service.provider_id,
+        },
       });
       
       return service;
@@ -191,7 +191,7 @@ class ServiceModel {
       // Vérifier que l'utilisateur est le prestataire affecté
       const checkResult = await pool.query(
         'SELECT * FROM services WHERE id = $1 AND provider_id = $2 AND status = $3',
-        [serviceId, providerId, 'assigned']
+        [serviceId, providerId, 'assigned'],
       );
       
       if (checkResult.rows.length === 0) {
@@ -201,7 +201,7 @@ class ServiceModel {
       // Mettre à jour le statut de la prestation
       const updateResult = await pool.query(
         'UPDATE services SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
-        ['in_progress', serviceId]
+        ['in_progress', serviceId],
       );
       
       const service = updateResult.rows[0];
@@ -212,8 +212,8 @@ class ServiceModel {
         data: { 
           service_id: service.id,
           client_id: service.client_id,
-          provider_id: service.provider_id
-        }
+          provider_id: service.provider_id,
+        },
       });
       
       return service;
@@ -229,7 +229,7 @@ class ServiceModel {
       // Vérifier que l'utilisateur est le prestataire affecté
       const checkResult = await pool.query(
         'SELECT * FROM services WHERE id = $1 AND provider_id = $2 AND status = $3',
-        [serviceId, providerId, 'in_progress']
+        [serviceId, providerId, 'in_progress'],
       );
       
       if (checkResult.rows.length === 0) {
@@ -239,7 +239,7 @@ class ServiceModel {
       // Mettre à jour le statut de la prestation
       const updateResult = await pool.query(
         'UPDATE services SET status = $1, completed_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
-        ['completed', serviceId]
+        ['completed', serviceId],
       );
       
       const service = updateResult.rows[0];
@@ -251,8 +251,8 @@ class ServiceModel {
           service_id: service.id,
           client_id: service.client_id,
           provider_id: service.provider_id,
-          amount: service.payment_amount
-        }
+          amount: service.payment_amount,
+        },
       });
       
       return service;
@@ -268,7 +268,7 @@ class ServiceModel {
       // Vérifier que l'utilisateur est le client ou le prestataire
       const checkResult = await pool.query(
         'SELECT * FROM services WHERE id = $1 AND (client_id = $2 OR provider_id = $2)',
-        [serviceId, userId]
+        [serviceId, userId],
       );
       
       if (checkResult.rows.length === 0) {
@@ -285,7 +285,7 @@ class ServiceModel {
       // Mettre à jour le statut de la prestation
       const updateResult = await pool.query(
         'UPDATE services SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
-        ['cancelled', serviceId]
+        ['cancelled', serviceId],
       );
       
       const updatedService = updateResult.rows[0];
@@ -298,8 +298,8 @@ class ServiceModel {
           client_id: updatedService.client_id,
           provider_id: updatedService.provider_id,
           cancelled_by: userId,
-          reason
-        }
+          reason,
+        },
       });
       
       return updatedService;
@@ -314,7 +314,7 @@ class ServiceModel {
     try {
       const result = await pool.query(
         'UPDATE services SET payment_status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
-        [status, serviceId]
+        [status, serviceId],
       );
       return result.rows[0];
     } catch (error) {
@@ -322,6 +322,6 @@ class ServiceModel {
       throw error;
     }
   }
-};
+}
 
 module.exports = new ServiceModel();

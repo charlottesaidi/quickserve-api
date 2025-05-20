@@ -64,5 +64,5 @@ function publishEvent(queue, event) {
 
 module.exports = {
   connectEventBus,
-  publishEvent
+  publishEvent,
 };

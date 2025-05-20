@@ -1,6 +1,5 @@
 const eventBus = require('../config/rabbitmq');
 const logger = require('../utils/logger');
-const locationService = require('./locationService');
 
 class EventService {
   async initialize() {
@@ -14,15 +13,15 @@ class EventService {
       logger.info(`Événement reçu: ${event.type}`);
       
       switch (event.type) {
-        case 'SERVICE_ASSIGNED':
-        case 'SERVICE_STARTED':
-          logger.info(`Suivi de géolocalisation activé pour le service #${event.data.service_id}`);
-          break;
+      case 'SERVICE_ASSIGNED':
+      case 'SERVICE_STARTED':
+        logger.info(`Suivi de géolocalisation activé pour le service #${event.data.service_id}`);
+        break;
           
-        case 'SERVICE_COMPLETED':
-        case 'SERVICE_CANCELLED':
-          logger.info(`Suivi de géolocalisation désactivé pour le service #${event.data.service_id}`);
-          break;
+      case 'SERVICE_COMPLETED':
+      case 'SERVICE_CANCELLED':
+        logger.info(`Suivi de géolocalisation désactivé pour le service #${event.data.service_id}`);
+        break;
       }
     });
   }
@@ -35,8 +34,8 @@ class EventService {
         service_id: serviceId,
         latitude,
         longitude,
-        updated_at: new Date()
-      }
+        updated_at: new Date(),
+      },
     });
   }
 }

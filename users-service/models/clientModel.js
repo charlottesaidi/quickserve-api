@@ -6,7 +6,7 @@ class ClientModel {
   async getAllClients() {
     try {
       const result = await pool.query(
-        "SELECT * FROM users WHERE role LIKE '%client%' ORDER BY lastname"
+        'SELECT * FROM users WHERE role LIKE \'%client%\' ORDER BY lastname',
       );
       return result.rows;
     } catch (error) {
@@ -19,8 +19,8 @@ class ClientModel {
   async getClientById(clientId) {
     try {
       const result = await pool.query(
-        "SELECT * FROM users WHERE id = $1 AND role LIKE '%client%'",
-        [clientId]
+        'SELECT * FROM users WHERE id = $1 AND role LIKE \'%client%\'',
+        [clientId],
       );
       return result.rows[0];
     } catch (error) {

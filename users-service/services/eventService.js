@@ -16,8 +16,8 @@ class EventService {
       data: {
         id: userData.id,
         email: userData.email,
-        role: userData.role
-      }
+        role: userData.role,
+      },
     });
   }
 
@@ -26,15 +26,15 @@ class EventService {
       type: 'USER_LOGGED_IN',
       data: { 
         id: userData.id, 
-        email: userData.email 
-      }
+        email: userData.email, 
+      },
     });
   }
 
   publishUserUpdated(userData) {
     eventBus.publish('user-events', {
       type: 'USER_UPDATED',
-      data: { id: userData.id }
+      data: { id: userData.id },
     });
   }
 }

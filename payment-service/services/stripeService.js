@@ -7,8 +7,8 @@ class StripeService {
       const customer = await stripe.customers.create({
         email,
         metadata: {
-          client_id: clientId.toString()
-        }
+          client_id: clientId.toString(),
+        },
       });
       
       return customer.id;
@@ -26,7 +26,7 @@ class StripeService {
         customer: customerId,
         setup_future_usage: 'off_session',
         confirm: false,
-        description
+        description,
       });
       
       return paymentIntent;
@@ -45,7 +45,7 @@ class StripeService {
         payment_method: paymentMethodId,
         setup_future_usage: 'off_session',
         confirm: false,
-        description
+        description,
       });
       
       return paymentIntent;
@@ -64,7 +64,7 @@ class StripeService {
         payment_method: paymentMethodId,
         confirm: true,
         off_session: true,
-        description
+        description,
       });
       
       return paymentIntent;
@@ -83,10 +83,10 @@ class StripeService {
     }
   }
 
-async attachPaymentMethodToCustomer(paymentMethodId, customerId) {
+  async attachPaymentMethodToCustomer(paymentMethodId, customerId) {
     try {
       await stripe.paymentMethods.attach(paymentMethodId, {
-        customer: customerId
+        customer: customerId,
       });
       
       return true;
@@ -119,8 +119,8 @@ async attachPaymentMethodToCustomer(paymentMethodId, customerId) {
     try {
       await stripe.customers.update(customerId, {
         invoice_settings: {
-          default_payment_method: paymentMethodId
-        }
+          default_payment_method: paymentMethodId,
+        },
       });
       
       return true;
@@ -135,7 +135,7 @@ async attachPaymentMethodToCustomer(paymentMethodId, customerId) {
       return stripe.webhooks.constructEvent(
         payload,
         signature,
-        webhookSecret
+        webhookSecret,
       );
     } catch (error) {
       logger.error('Erreur lors de la construction de l\'événement webhook:', error);

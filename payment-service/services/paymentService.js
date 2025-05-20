@@ -58,7 +58,7 @@ class PaymentService {
           amount,
           paymentMethod.stripe_customer_id,
           paymentMethod.stripe_payment_method_id,
-          `Paiement pour le service #${serviceId}`
+          `Paiement pour le service #${serviceId}`,
         );
       } else {
         // Obtenir ou créer un customer Stripe
@@ -74,7 +74,7 @@ class PaymentService {
         paymentIntent = await stripeService.createPaymentIntent(
           amount,
           stripeCustomerId,
-          `Paiement pour le service #${serviceId}`
+          `Paiement pour le service #${serviceId}`,
         );
       }
       
@@ -82,7 +82,7 @@ class PaymentService {
       await paymentModel.updatePaymentIntent(payment.id, paymentIntent.id);
       
       return {
-        client_secret: paymentIntent.client_secret
+        client_secret: paymentIntent.client_secret,
       };
     } catch (error) {
       logger.error('Erreur lors de la création de l\'intention de paiement:', error);
@@ -120,7 +120,7 @@ class PaymentService {
         payment.client_id,
         payment.id,
         payment.amount,
-        paymentIntentId
+        paymentIntentId,
       );
       
       return updatedPayment;
@@ -154,7 +154,7 @@ class PaymentService {
           amount,
           defaultPaymentMethod.stripe_customer_id,
           defaultPaymentMethod.stripe_payment_method_id,
-          `Paiement automatique pour le service #${serviceId}`
+          `Paiement automatique pour le service #${serviceId}`,
         );
         
         // Mettre à jour le paiement
@@ -167,7 +167,7 @@ class PaymentService {
           clientId,
           payment.id,
           payment.amount,
-          paymentIntent.id
+          paymentIntent.id,
         );
         
         logger.info(`Paiement automatique réussi pour le service #${serviceId}`);

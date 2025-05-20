@@ -1,9 +1,10 @@
 const ServiceModel = require('../models/serviceModel');
 const CategoryModel = require('../models/categoryModel');
+const ServiceRatingModel = require('../models/ratingModel');
 
 // Contrôleur pour les prestations de services
 class ServiceController {
-    async createService(req, res, next) {
+  async createService(req, res, next) {
     try {
       const { 
         category_id, 
@@ -12,7 +13,7 @@ class ServiceController {
         address, 
         latitude, 
         longitude, 
-        scheduled_at 
+        scheduled_at, 
       } = req.body;
       
       // Vérifier si la catégorie existe
@@ -32,14 +33,14 @@ class ServiceController {
         latitude,
         longitude,
         payment_amount: category.base_price,
-        scheduled_at
+        scheduled_at,
       };
       
       const service = await ServiceModel.createService(serviceData);
       
       res.status(201).json({
         message: 'Prestation créée avec succès',
-        service
+        service,
       });
     } catch (error) {
       next(error);
@@ -105,7 +106,7 @@ class ServiceController {
       
       res.status(200).json({
         service,
-        ratings
+        ratings,
       });
     } catch (error) {
       next(error);
@@ -126,7 +127,7 @@ class ServiceController {
       
       res.status(200).json({
         message: 'Prestation acceptée avec succès',
-        service
+        service,
       });
     } catch (error) {
       if (error.message === 'Prestation non disponible') {
@@ -145,7 +146,7 @@ class ServiceController {
       
       res.status(200).json({
         message: 'Prestation démarrée avec succès',
-        service
+        service,
       });
     } catch (error) {
       if (error.message === 'Accès non autorisé ou prestation non assignée') {
@@ -164,7 +165,7 @@ class ServiceController {
       
       res.status(200).json({
         message: 'Prestation terminée avec succès',
-        service
+        service,
       });
     } catch (error) {
       if (error.message === 'Accès non autorisé ou prestation pas en cours') {
@@ -184,7 +185,7 @@ class ServiceController {
       
       res.status(200).json({
         message: 'Prestation annulée avec succès',
-        service
+        service,
       });
     } catch (error) {
       if (error.message === 'Accès non autorisé' || error.message === 'Cette prestation ne peut pas être annulée') {

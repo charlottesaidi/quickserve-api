@@ -6,7 +6,7 @@ class ProviderModel {
   async getAllProviders() {
     try {
       const result = await pool.query(
-        "SELECT * FROM users WHERE role LIKE '%provider%' ORDER BY lastname"
+        'SELECT * FROM users WHERE role LIKE \'%provider%\' ORDER BY lastname',
       );
       return result.rows;
     } catch (error) {
@@ -19,8 +19,8 @@ class ProviderModel {
   async getProviderById(providerId) {
     try {
       const result = await pool.query(
-        "SELECT * FROM users WHERE id = $1 AND role LIKE '%provider%'",
-        [providerId]
+        'SELECT * FROM users WHERE id = $1 AND role LIKE \'%provider%\'',
+        [providerId],
       );
       return result.rows[0];
     } catch (error) {

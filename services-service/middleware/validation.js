@@ -1,5 +1,3 @@
-const logger = require('../utils/logger');
-
 // Middleware de validation pour la création de service
 function validateCreateService(req, res, next) {
   const { 
@@ -8,7 +6,7 @@ function validateCreateService(req, res, next) {
     description, 
     address, 
     latitude, 
-    longitude 
+    longitude, 
   } = req.body;
   
   // Valider la présence des champs obligatoires
@@ -18,8 +16,8 @@ function validateCreateService(req, res, next) {
       errors: {
         category_id: category_id ? undefined : 'La catégorie est requise',
         title: title ? undefined : 'Le titre est requis',
-        address: address ? undefined : 'L\'adresse est requise'
-      }
+        address: address ? undefined : 'L\'adresse est requise',
+      },
     });
   }
   
@@ -27,7 +25,7 @@ function validateCreateService(req, res, next) {
   if (typeof category_id !== 'number' || isNaN(category_id)) {
     return res.status(400).json({ 
       message: 'Données invalides', 
-      errors: { category_id: 'La catégorie doit être un nombre' } 
+      errors: { category_id: 'La catégorie doit être un nombre' }, 
     });
   }
   
@@ -37,8 +35,8 @@ function validateCreateService(req, res, next) {
       message: 'Données invalides', 
       errors: {
         latitude: latitude && isNaN(parseFloat(latitude)) ? 'La latitude doit être un nombre' : undefined,
-        longitude: longitude && isNaN(parseFloat(longitude)) ? 'La longitude doit être un nombre' : undefined
-      }
+        longitude: longitude && isNaN(parseFloat(longitude)) ? 'La longitude doit être un nombre' : undefined,
+      },
     });
   }
   
@@ -53,7 +51,7 @@ function validateRating(req, res, next) {
   if (rating === undefined) {
     return res.status(400).json({ 
       message: 'Données invalides', 
-      errors: { rating: 'L\'évaluation est requise' } 
+      errors: { rating: 'L\'évaluation est requise' }, 
     });
   }
   
@@ -61,7 +59,7 @@ function validateRating(req, res, next) {
   if (isNaN(parseInt(rating)) || parseInt(rating) < 1 || parseInt(rating) > 5) {
     return res.status(400).json({ 
       message: 'Données invalides', 
-      errors: { rating: 'L\'évaluation doit être un nombre entre 1 et 5' } 
+      errors: { rating: 'L\'évaluation doit être un nombre entre 1 et 5' }, 
     });
   }
   
@@ -70,5 +68,5 @@ function validateRating(req, res, next) {
 
 module.exports = {
   validateCreateService,
-  validateRating
+  validateRating,
 };

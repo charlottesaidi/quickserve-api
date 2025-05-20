@@ -19,7 +19,7 @@ class LocationService {
         providerId,
         latitude,
         longitude,
-        accuracy
+        accuracy,
       );
       
       // Si c'est dans le cadre d'un service, ajouter à l'historique
@@ -60,10 +60,7 @@ class LocationService {
     return locationModel.findNearbyProviders(latitude, longitude, radius);
   }
 
-  async getServiceLocationHistory(serviceId, userId, userRole) {
-    // Dans une implémentation réelle, vérifiez que l'utilisateur a les droits d'accès à cet historique
-    // Cela pourrait nécessiter une requête à un autre service pour valider les permissions
-    
+  async getServiceLocationHistory(serviceId) {
     return historyModel.getServiceLocationHistory(serviceId);
   }
 

@@ -11,5 +11,5 @@ module.exports = {
   USERS_SERVICE_URL: process.env.USERS_SERVICE_URL || 'http://localhost:3001',
   GEOLOCATION_SERVICE_URL: process.env.GEOLOCATION_SERVICE_URL || 'http://localhost:3002',
   SERVICES_SERVICE_URL: process.env.SERVICES_SERVICE_URL || 'http://localhost:3003',
-  PAYMENT_SERVICE_URL: process.env.PAYMENT_SERVICE_URL || 'http://localhost:3004'
+  PAYMENT_SERVICE_URL: process.env.PAYMENT_SERVICE_URL || 'http://localhost:3004',
 };

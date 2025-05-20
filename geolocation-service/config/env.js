@@ -13,7 +13,7 @@ module.exports = {
   },
   RABBITMQ_URL: process.env.RABBITMQ_URL || 'amqp://localhost:5672',
   SOCKET_CORS: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
 };

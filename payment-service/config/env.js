@@ -15,6 +15,6 @@ module.exports = {
   STRIPE: {
     SECRET_KEY: process.env.STRIPE_SECRET_KEY || 'sk_test_your_stripe_key',
     WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || 'whsec_your_webhook_secret',
-    API_VERSION: '2022-11-15'
-  }
+    API_VERSION: '2022-11-15',
+  },
 };

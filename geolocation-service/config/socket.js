@@ -7,7 +7,7 @@ let io;
 
 function initializeSocket(server) {
   io = socketIo(server, {
-    cors: SOCKET_CORS
+    cors: SOCKET_CORS,
   });
 
   io.use((socket, next) => {
@@ -51,5 +51,5 @@ function getIO() {
 
 module.exports = {
   initializeSocket,
-  getIO
+  getIO,
 };

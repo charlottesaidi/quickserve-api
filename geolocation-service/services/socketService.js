@@ -16,7 +16,7 @@ class SocketService {
 
   setupSocketListeners(socket) {
     // Mise à jour de la position (pour les prestataires)
-    socket.on('update_location', async (data) => {
+    socket.on('update_location', async () => {
       if (socket.userRole !== 'provider') {
         socket.emit('error', { message: 'Non autorisé' });
         return;
@@ -70,7 +70,7 @@ class SocketService {
         provider_id: providerId,
         latitude,
         longitude,
-        updated_at: new Date()
+        updated_at: new Date(),
       });
       
       logger.debug(`Émission de mise à jour de position pour le service ${serviceId}`);

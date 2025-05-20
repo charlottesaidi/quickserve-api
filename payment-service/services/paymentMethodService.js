@@ -38,7 +38,7 @@ class PaymentMethodService {
         stripe_payment_method_id: paymentMethodId,
         stripe_customer_id: stripeCustomerId,
         is_default: setDefault,
-        auto_pay: autoPay
+        auto_pay: autoPay,
       };
       
       // Si c'est défini comme carte par défaut, mettre à jour toutes les autres cartes
@@ -51,7 +51,7 @@ class PaymentMethodService {
       return {
         id: result.id,
         is_default: setDefault,
-        auto_pay: autoPay
+        auto_pay: autoPay,
       };
     } catch (error) {
       logger.error('Erreur lors de l\'ajout de la méthode de paiement:', error);
@@ -93,7 +93,7 @@ class PaymentMethodService {
           // Mettre à jour dans Stripe
           await stripeService.updateDefaultPaymentMethod(
             paymentMethod.stripe_customer_id,
-            otherMethods[0].stripe_payment_method_id
+            otherMethods[0].stripe_payment_method_id,
           );
         }
       }
@@ -120,7 +120,7 @@ class PaymentMethodService {
       // Mettre à jour dans Stripe
       await stripeService.updateDefaultPaymentMethod(
         paymentMethod.stripe_customer_id,
-        paymentMethod.stripe_payment_method_id
+        paymentMethod.stripe_payment_method_id,
       );
       
       return { success: true };

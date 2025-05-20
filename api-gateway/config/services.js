@@ -4,18 +4,18 @@ const env = require('./env');
 module.exports = {
   users: {
     url: env.USERS_SERVICE_URL,
-    path: '/api/users'
+    path: '/api/users',
   },
   geolocation: {
     url: env.GEOLOCATION_SERVICE_URL,
-    path: '/api/geolocation'
+    path: '/api/geolocation',
   },
   services: {
     url: env.SERVICES_SERVICE_URL,
-    path: '/api/services'
+    path: '/api/services',
   },
   payments: {
     url: env.PAYMENT_SERVICE_URL,
-    path: '/api/payments'
-  }
+    path: '/api/payments',
+  },
 };

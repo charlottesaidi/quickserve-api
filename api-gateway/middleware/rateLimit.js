@@ -11,7 +11,7 @@ const apiLimiter = rateLimit({
   handler: (req, res, next, options) => {
     logger.warn(`Rate limit dépassé pour l'IP: ${req.ip}`);
     res.status(429).json(options.message);
-  }
+  },
 });
 
 module.exports = apiLimiter;

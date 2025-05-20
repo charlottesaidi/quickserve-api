@@ -9,7 +9,7 @@ class CategoryModel {
         description, 
         base_price, 
         image_url, 
-        active 
+        active, 
       } = categoryData;
       
       const result = await pool.query(
@@ -22,8 +22,8 @@ class CategoryModel {
           description,
           base_price,
           image_url,
-          active
-        ]
+          active,
+        ],
       );
       
       const category = result.rows[0];
@@ -39,7 +39,7 @@ class CategoryModel {
   async getAllCategories() {
     try {
       const result = await pool.query(
-        'SELECT * FROM service_categories WHERE active = true ORDER BY name'
+        'SELECT * FROM service_categories WHERE active = true ORDER BY name',
       );
       return result.rows;
     } catch (error) {
@@ -53,7 +53,7 @@ class CategoryModel {
     try {
       const result = await pool.query(
         'SELECT * FROM service_categories WHERE id = $1 AND active = true',
-        [categoryId]
+        [categoryId],
       );
       return result.rows[0];
     } catch (error) {

@@ -80,5 +80,5 @@ async function connectToDatabase() {
 
 module.exports = {
   pool,
-  connectToDatabase
+  connectToDatabase,
 };

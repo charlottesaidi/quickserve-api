@@ -43,5 +43,5 @@ function validateProfileUpdate(req, res, next) {
 module.exports = {
   validateRegister,
   validateLogin,
-  validateProfileUpdate
+  validateProfileUpdate,
 };

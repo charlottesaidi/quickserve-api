@@ -17,7 +17,7 @@ class UserModel {
     // Création de l'utilisateur
     const result = await pool.query(
       'INSERT INTO users (email, password, firstname, lastname, phone_number, role) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, email, firstname, lastname, role',
-      [email, hashedPassword, firstname, lastname, phone_number, role]
+      [email, hashedPassword, firstname, lastname, phone_number, role],
     );
     
     return result.rows[0];
@@ -31,7 +31,7 @@ class UserModel {
   async findById(id) {
     const result = await pool.query(
       'SELECT id, email, firstname, lastname, phone_number, role, created_at FROM users WHERE id = $1',
-      [id]
+      [id],
     );
     return result.rows[0] || null;
   }
@@ -41,7 +41,7 @@ class UserModel {
     
     const result = await pool.query(
       'UPDATE users SET firstname = $1, lastname = $2, phone_number = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING id, email, firstname, lastname, phone_number, role',
-      [firstname, lastname, phone_number, id]
+      [firstname, lastname, phone_number, id],
     );
     
     return result.rows[0];
@@ -49,7 +49,7 @@ class UserModel {
 
   async getAllUsers() {
     const result = await pool.query(
-      'SELECT id, email, firstname, lastname, role, created_at FROM users ORDER BY created_at DESC'
+      'SELECT id, email, firstname, lastname, role, created_at FROM users ORDER BY created_at DESC',
     );
     return result.rows;
   }

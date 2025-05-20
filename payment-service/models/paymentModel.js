@@ -35,7 +35,7 @@ class PaymentModel {
         `INSERT INTO payments (service_id, client_id, amount, status)
          VALUES ($1, $2, $3, $4)
          RETURNING *`,
-        [serviceId, clientId, amount, status]
+        [serviceId, clientId, amount, status],
       );
       
       return result.rows[0];
@@ -49,7 +49,7 @@ class PaymentModel {
     try {
       const result = await pool.query(
         'UPDATE payments SET payment_intent_id = $1 WHERE id = $2 RETURNING *',
-        [paymentIntentId, paymentId]
+        [paymentIntentId, paymentId],
       );
       
       if (result.rows.length === 0) {
@@ -95,7 +95,7 @@ class PaymentModel {
     try {
       const result = await pool.query(
         'SELECT * FROM payments WHERE payment_intent_id = $1',
-        [paymentIntentId]
+        [paymentIntentId],
       );
       
       return result.rows[0] || null;
@@ -109,7 +109,7 @@ class PaymentModel {
     try {
       const result = await pool.query(
         'SELECT * FROM payments WHERE service_id = $1',
-        [serviceId]
+        [serviceId],
       );
       
       return result.rows[0] || null;

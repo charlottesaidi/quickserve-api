@@ -1,7 +1,9 @@
 const ServiceRatingModel = require('../models/ratingModel');
+const ServiceModel = require('../models/serviceModel');
+const { publishEvent } = require('../config/rabbitmq');
 
 class RatingController {
-    async rateService(req, res, next) {
+  async rateService(req, res, next) {
     try {
       const serviceId = req.params.id;
       const { rating, comment } = req.body;
@@ -23,13 +25,13 @@ class RatingController {
           service_id: serviceId,
           client_id: req.user.id,
           provider_id: service.provider_id,
-          rating
-        }
+          rating,
+        },
       });
       
       res.status(200).json({
         message: 'Évaluation enregistrée avec succès',
-        rating: ratingData
+        rating: ratingData,
       });
     } catch (error) {
       if (error.message === 'Cette prestation a déjà été évaluée' || 

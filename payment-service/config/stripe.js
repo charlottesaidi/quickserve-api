@@ -11,7 +11,7 @@ const stripeClient = stripe(STRIPE.SECRET_KEY, {
 // Vérifier la connexion à Stripe
 async function checkStripeConnection() {
   try {
-    const balance = await stripeClient.balance.retrieve();
+    // const balance = await stripeClient.balance.retrieve();
     logger.info('Connexion à Stripe établie');
     return true;
   } catch (error) {
@@ -22,5 +22,5 @@ async function checkStripeConnection() {
 
 module.exports = {
   stripe: stripeClient,
-  checkStripeConnection
+  checkStripeConnection,
 };

@@ -12,5 +12,5 @@ module.exports = {
   DB_PASSWORD: process.env.DB_PASSWORD || 'postgres',
   DB_PORT: process.env.DB_PORT || 5432,
   RABBITMQ_URL: process.env.RABBITMQ_URL || 'amqp://localhost',
-  JWT_SECRET: process.env.JWT_SECRET || 'your_jwt_secret'
+  JWT_SECRET: process.env.JWT_SECRET || 'your_jwt_secret',
 };

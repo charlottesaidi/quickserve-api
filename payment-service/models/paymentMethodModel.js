@@ -42,7 +42,7 @@ class PaymentMethodModel {
         stripe_payment_method_id,
         stripe_customer_id,
         is_default,
-        auto_pay
+        auto_pay,
       } = paymentMethodData;
       
       const result = await pool.query(
@@ -60,8 +60,8 @@ class PaymentMethodModel {
           stripe_payment_method_id,
           stripe_customer_id,
           is_default,
-          auto_pay
-        ]
+          auto_pay,
+        ],
       );
       
       return result.rows[0];
@@ -75,7 +75,7 @@ class PaymentMethodModel {
     try {
       const result = await pool.query(
         'SELECT id, type, last_digits, expiry_month, expiry_year, card_brand, is_default, auto_pay, created_at FROM payment_methods WHERE client_id = $1 ORDER BY is_default DESC, created_at DESC',
-        [clientId]
+        [clientId],
       );
       
       return result.rows;
@@ -89,7 +89,7 @@ class PaymentMethodModel {
     try {
       const result = await pool.query(
         'SELECT * FROM payment_methods WHERE id = $1 AND client_id = $2',
-        [id, clientId]
+        [id, clientId],
       );
       
       return result.rows[0] || null;
@@ -103,7 +103,7 @@ class PaymentMethodModel {
     try {
       const result = await pool.query(
         'SELECT * FROM payment_methods WHERE client_id = $1 AND is_default = true LIMIT 1',
-        [clientId]
+        [clientId],
       );
       
       return result.rows[0] || null;
@@ -118,13 +118,13 @@ class PaymentMethodModel {
       // D'abord, définir toutes les méthodes de paiement comme non par défaut
       await pool.query(
         'UPDATE payment_methods SET is_default = false WHERE client_id = $1',
-        [clientId]
+        [clientId],
       );
       
       // Ensuite, définir la méthode spécifiée comme par défaut
       const result = await pool.query(
         'UPDATE payment_methods SET is_default = true WHERE id = $1 AND client_id = $2 RETURNING *',
-        [id, clientId]
+        [id, clientId],
       );
       
       if (result.rows.length === 0) {
@@ -142,7 +142,7 @@ class PaymentMethodModel {
     try {
       const result = await pool.query(
         'DELETE FROM payment_methods WHERE id = $1 AND client_id = $2 RETURNING *',
-        [id, clientId]
+        [id, clientId],
       );
       
       if (result.rows.length === 0) {
@@ -160,7 +160,7 @@ class PaymentMethodModel {
     try {
       const result = await pool.query(
         'SELECT stripe_customer_id FROM payment_methods WHERE client_id = $1 LIMIT 1',
-        [clientId]
+        [clientId],
       );
       
       return result.rows.length > 0 ? result.rows[0].stripe_customer_id : null;

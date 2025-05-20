@@ -12,20 +12,20 @@ async function handleWebhook(req, res) {
     const event = await stripeService.constructWebhookEvent(
       req.body,
       sig,
-      STRIPE.WEBHOOK_SECRET
+      STRIPE.WEBHOOK_SECRET,
     );
     
     logger.info(`Webhook Stripe reçu: ${event.type}`);
     
     // Traiter les différents types d'événements
     switch (event.type) {
-      case 'payment_intent.succeeded':
-        await handlePaymentIntentSucceeded(event.data.object);
-        break;
+    case 'payment_intent.succeeded':
+      await handlePaymentIntentSucceeded(event.data.object);
+      break;
         
-      case 'payment_intent.payment_failed':
-        await handlePaymentIntentFailed(event.data.object);
-        break;
+    case 'payment_intent.payment_failed':
+      await handlePaymentIntentFailed(event.data.object);
+      break;
         
       // Vous pouvez ajouter d'autres types d'événements au besoin
     }
@@ -56,7 +56,7 @@ async function handlePaymentIntentSucceeded(paymentIntent) {
       payment.client_id,
       payment.id,
       payment.amount,
-      paymentIntent.id
+      paymentIntent.id,
     );
     
     logger.info(`Paiement #${payment.id} validé via webhook Stripe`);
@@ -89,7 +89,7 @@ async function handlePaymentIntentFailed(paymentIntent) {
       payment.service_id,
       payment.client_id,
       payment.id,
-      errorMessage
+      errorMessage,
     );
     
     logger.info(`Paiement #${payment.id} échoué via webhook Stripe: ${errorMessage}`);
@@ -100,5 +100,5 @@ async function handlePaymentIntentFailed(paymentIntent) {
 }
 
 module.exports = {
-  handleWebhook
+  handleWebhook,
 };

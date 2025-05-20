@@ -8,7 +8,7 @@ function setupHealthRoutes(app, services) {
     res.status(200).json({ 
       status: 'ok', 
       version: process.env.npm_package_version || '1.0.0',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     logger.debug('Vérification de santé de l\'API Gateway réussie');
   });
@@ -20,9 +20,9 @@ function setupHealthRoutes(app, services) {
       res.status(200).json({
         gateway: { 
           status: 'ok',
-          uptime: process.uptime()
+          uptime: process.uptime(),
         },
-        services: healthStatus
+        services: healthStatus,
       });
       logger.debug('Vérification de santé de tous les services réussie');
     } catch (error) {

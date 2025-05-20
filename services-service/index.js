@@ -38,7 +38,7 @@ async function startServer() {
     });
   } catch (error) {
     logger.error('Erreur lors du démarrage du serveur:', error);
-    process.exit(1);
+    throw error;
   }
 }
 

@@ -6,7 +6,9 @@ function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   
-  if (!token) return res.status(401).json({ message: 'Accès non autorisé' });
+  if (!token) {
+    return res.status(401).json({ message: 'Accès non autorisé' });
+  }
   
   try {
     const user = jwt.verify(token, JWT_SECRET);
@@ -19,5 +21,5 @@ function authenticateToken(req, res, next) {
 }
 
 module.exports = {
-  authenticateToken
+  authenticateToken,
 };

@@ -6,7 +6,9 @@ function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   
-  if (!token) return res.status(401).json({ message: 'Accès non autorisé' });
+  if (!token) {
+    return res.status(401).json({ message: 'Accès non autorisé' });
+  }
   
   try {
     const user = jwt.verify(token, JWT_SECRET);
@@ -14,7 +16,7 @@ function authenticateToken(req, res, next) {
     next();
   } catch (error) {
     logger.error('Token d\'authentification invalide:', error);
-    return next(error)
+    return next(error);
     // return res.status(403).json({ message: 'Token invalide' });
   }
 }
@@ -38,5 +40,5 @@ function checkRole(role) {
 
 module.exports = {
   authenticateToken,
-  checkRole
+  checkRole,
 };

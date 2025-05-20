@@ -13,7 +13,7 @@ class UserController {
       
       res.status(201).json({ 
         message: 'Utilisateur créé avec succès',
-        user
+        user,
       });
     } catch (error) {
       if (error.message === 'Cet email est déjà utilisé') {
@@ -35,7 +35,7 @@ class UserController {
       res.status(200).json({
         message: 'Connexion réussie',
         token: result.token,
-        user: result.user
+        user: result.user,
       });
     } catch (error) {
       if (error.message === 'Email ou mot de passe incorrect') {
@@ -74,7 +74,7 @@ class UserController {
       
       res.status(200).json({
         message: 'Profil mis à jour avec succès',
-        user: updatedUser
+        user: updatedUser,
       });
     } catch (error) {
       console.error('Erreur lors de la mise à jour du profil:', error);

@@ -1,5 +1,3 @@
-const logger = require('../utils/logger');
-
 function validateCoordinates(req, res, next) {
   const { latitude, longitude } = req.query;
   
@@ -17,7 +15,7 @@ function validateCoordinates(req, res, next) {
   // Convertir en nombres et stocker dans l'objet req
   req.coordinates = {
     latitude: lat,
-    longitude: lng
+    longitude: lng,
   };
   
   next();
@@ -42,7 +40,7 @@ function validateLocationUpdate(req, res, next) {
     latitude: lat,
     longitude: lng,
     accuracy: accuracy ? parseFloat(accuracy) : null,
-    service_id: req.body.service_id ? parseInt(req.body.service_id, 10) : null
+    service_id: req.body.service_id ? parseInt(req.body.service_id, 10) : null,
   };
   
   next();
@@ -50,5 +48,5 @@ function validateLocationUpdate(req, res, next) {
 
 module.exports = {
   validateCoordinates,
-  validateLocationUpdate
+  validateLocationUpdate,
 };

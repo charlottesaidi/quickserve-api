@@ -7,7 +7,7 @@ const publicPaths = [
   '/users/login',
   '/users/register',
   '/categories',
-  '/health'
+  '/health',
 ];
 
 // Middleware d'authentification
@@ -28,13 +28,13 @@ const authenticateJWT = (req, res, next) => {
     });
   } else {
     // Vérifier si c'est une route publique
-    const isPublicPath = publicPaths.some(path => req.path.includes(path));
+    const isPublicPath = publicPaths.some((path) => req.path.includes(path));
     
     if (isPublicPath) {
       next();
     } else {
       logger.warn(`Tentative d'accès sans authentification: ${req.path}`);
-      res.status(401).json({ message: "Authentification requise" });
+      res.status(401).json({ message: 'Authentification requise' });
     }
   }
 };

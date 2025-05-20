@@ -4,7 +4,7 @@ const { DB_CONFIG } = require('./env');
 const pool = new Pool(DB_CONFIG);
 
 // Test de connexion
-pool.query('SELECT NOW()', (err, res) => {
+pool.query('SELECT NOW()', (err) => {
   if (err) {
     console.error('Erreur de connexion à la base de données:', err);
   } else {

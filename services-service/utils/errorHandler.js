@@ -1,11 +1,11 @@
 const logger = require('./logger');
 
 // Middleware de gestion des erreurs
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res) {
   // Log de l'erreur
   logger.error({
     message: 'Erreur non gérée',
-    error: err.message
+    error: err.message,
   });
 
   // Déterminer le code de statut approprié
@@ -14,7 +14,7 @@ function errorHandler(err, req, res, next) {
   // Répondre avec un message d'erreur
   res.status(statusCode).json({
     message: statusCode === 500 ? 'Erreur serveur' : err.message,
-    error: process.env.NODE_ENV === 'production' ? undefined : err.stack
+    error: process.env.NODE_ENV === 'production' ? undefined : err.stack,
   });
 }
 
@@ -59,5 +59,5 @@ module.exports = {
   BusinessError,
   AuthError,
   ForbiddenError,
-  NotFoundError
+  NotFoundError,
 };

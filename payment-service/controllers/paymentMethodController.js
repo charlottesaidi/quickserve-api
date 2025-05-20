@@ -1,4 +1,3 @@
-const paymentMethodService = require('../services/paymentMethodService');
 const stripeService = require('../services/stripeService');
 const paymentMethodModel = require('../models/paymentMethodModel');
 const logger = require('../utils/logger');
@@ -43,7 +42,7 @@ class PaymentMethodController {
         stripe_payment_method_id: paymentMethodId,
         stripe_customer_id: stripeCustomerId,
         is_default: setDefault,
-        auto_pay: autoPay
+        auto_pay: autoPay,
       };
       
       // Si c'est défini comme carte par défaut, mettre à jour toutes les autres cartes
@@ -57,7 +56,7 @@ class PaymentMethodController {
         message: 'Méthode de paiement ajoutée avec succès',
         payment_method_id: result.id,
         is_default: setDefault,
-        auto_pay: autoPay
+        auto_pay: autoPay,
       });
     } catch (error) {
       logger.error('Erreur lors de l\'ajout de la méthode de paiement:', error);
@@ -110,7 +109,7 @@ class PaymentMethodController {
           // Mettre à jour dans Stripe
           await stripeService.updateDefaultPaymentMethod(
             paymentMethod.stripe_customer_id,
-            otherMethods[0].stripe_payment_method_id
+            otherMethods[0].stripe_payment_method_id,
           );
         }
       }
@@ -144,7 +143,7 @@ class PaymentMethodController {
       // Mettre à jour dans Stripe
       await stripeService.updateDefaultPaymentMethod(
         paymentMethod.stripe_customer_id,
-        paymentMethod.stripe_payment_method_id
+        paymentMethod.stripe_payment_method_id,
       );
       
       res.status(200).json({ message: 'Méthode de paiement définie par défaut avec succès' });

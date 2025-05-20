@@ -29,7 +29,7 @@ class HistoryModel {
         `INSERT INTO service_location_history (service_id, provider_id, latitude, longitude)
          VALUES ($1, $2, $3, $4)
          RETURNING *`,
-        [serviceId, providerId, latitude, longitude]
+        [serviceId, providerId, latitude, longitude],
       );
       
       return result.rows[0];
@@ -43,7 +43,7 @@ class HistoryModel {
     try {
       const result = await pool.query(
         'SELECT latitude, longitude, created_at FROM service_location_history WHERE service_id = $1 ORDER BY created_at',
-        [serviceId]
+        [serviceId],
       );
       
       return result.rows;
@@ -59,7 +59,7 @@ class HistoryModel {
       // Elle pourrait nécessiter une jointure avec une table services ou une requête à un autre service
       const result = await pool.query(
         'SELECT DISTINCT provider_id, service_id FROM service_location_history WHERE service_id = $1 LIMIT 1',
-        [serviceId]
+        [serviceId],
       );
       
       return result.rows[0] || null;

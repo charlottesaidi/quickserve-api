@@ -31,7 +31,7 @@ class LocationModel {
          ON CONFLICT (provider_id) 
          DO UPDATE SET latitude = $2, longitude = $3, accuracy = $4, updated_at = CURRENT_TIMESTAMP
          RETURNING *`,
-        [providerId, latitude, longitude, accuracy]
+        [providerId, latitude, longitude, accuracy],
       );
       
       return result.rows[0];
@@ -45,7 +45,7 @@ class LocationModel {
     try {
       const result = await pool.query(
         'SELECT latitude, longitude, accuracy, updated_at FROM provider_locations WHERE provider_id = $1',
-        [providerId]
+        [providerId],
       );
       
       return result.rows[0] || null;
