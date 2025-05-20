@@ -53,6 +53,27 @@ async function initializeDatabase() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (service_id) REFERENCES services(id)
       );
+
+      DELETE FROM service_categories
+      WHERE id IN (
+          SELECT id
+          FROM (
+              SELECT id,
+                    ROW_NUMBER() OVER (PARTITION BY name ORDER BY id) as row_num
+              FROM service_categories
+          ) t
+          WHERE t.row_num > 1
+      );
+
+      DO $$
+      BEGIN
+          IF NOT EXISTS (
+              SELECT 1 FROM pg_constraint 
+              WHERE conname = 'unique_category_name' AND conrelid = 'service_categories'::regclass
+          ) THEN
+              ALTER TABLE service_categories ADD CONSTRAINT unique_category_name UNIQUE (name);
+          END IF;
+      END $$;
       
       CREATE INDEX IF NOT EXISTS idx_services_client ON services (client_id);
       CREATE INDEX IF NOT EXISTS idx_services_provider ON services (provider_id);
