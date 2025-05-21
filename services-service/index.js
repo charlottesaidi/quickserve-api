@@ -6,7 +6,7 @@ const { connectEventBus } = require('./config/rabbitmq');
 const serviceRoutes = require('./routes/serviceRoutes');
 const errorHandler = require('./utils/errorHandler');
 const logger = require('./utils/logger');
-const migrateSchema = require("quickserve-api/services-service/config/migration/migrate_categories");
+const migrateSchema = require("./config/migration/migrate_categories");
 
 // Charger les variables d'environnement
 dotenv.config();
