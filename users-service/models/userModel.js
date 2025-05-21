@@ -49,7 +49,7 @@ class UserModel {
 
   async getAllUsers() {
     const result = await pool.query(
-      'SELECT id, email, firstname, lastname, role, created_at FROM users ORDER BY created_at DESC',
+      'SELECT id, email, password, firstname, lastname, role, created_at FROM users ORDER BY created_at DESC',
     );
     return result.rows;
   }

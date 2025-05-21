@@ -19,7 +19,7 @@ class AuthService {
     
     // Génération du token JWT
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user.id, email: user.email, firstname: user.firstname, lastname: user.lastname, role: user.role },
       JWT_SECRET,
       { expiresIn: '24h' },
     );
