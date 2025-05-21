@@ -1,35 +1,43 @@
 const CategoryModel = require('../models/categoryModel');
 
 class CategoryController {
-  async getAllCategories (req, res, next) {
+  async getAllCategories(req, res, next) {
     try {
       const categories = await CategoryModel.getAllCategories();
       res.status(200).json({ categories });
     } catch (error) {
       next(error);
     }
-  } 
+  }
 
   async createCategory(req, res, next) {
     try {
-      const { 
-        name, 
-        description, 
-        base_price, 
-        image_url, 
+      const {
+        name,
+        slug,
+        description,
+        full_description,
+        features,
+        faq,
+        base_price,
+        image_url
       } = req.body;
-        
+
       // Créer la prestation
       const categoryData = {
         name,
+        slug,
         description,
+        full_description,
+        features,
+        faq,
         base_price,
         image_url,
         active: true,
       };
-        
+
       const category = await CategoryModel.createCategory(categoryData);
-        
+
       res.status(201).json({
         message: 'Catégorie de prestation créée avec succès',
         category,
