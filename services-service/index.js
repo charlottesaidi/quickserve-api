@@ -6,6 +6,7 @@ const { connectEventBus } = require('./config/rabbitmq');
 const serviceRoutes = require('./routes/serviceRoutes');
 const errorHandler = require('./utils/errorHandler');
 const logger = require('./utils/logger');
+const migrateSchema = require("quickserve-api/services-service/config/migration/migrate_categories");
 
 // Charger les variables d'environnement
 dotenv.config();
@@ -28,10 +29,13 @@ async function startServer() {
   try {
     // Initialiser la base de données
     await connectToDatabase();
-    
+
+    // Ajout des colonnes à service_categories si elles n'existent pas
+    await migrateSchema();
+
     // Se connecter au bus d'événements
     await connectEventBus();
-    
+
     // Démarrer le serveur HTTP
     app.listen(PORT, () => {
       logger.info(`Service de prestations démarré sur le port ${PORT}`);

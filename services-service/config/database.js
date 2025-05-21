@@ -1,6 +1,5 @@
 const { Pool } = require('pg');
 const config = require('./env');
-const migrateSchema = require('./migration/migrate_categories');
 const logger = require('../utils/logger');
 
 // Création du pool de connexion PostgreSQL
@@ -76,8 +75,6 @@ async function connectToDatabase() {
     await pool.query('SELECT NOW()');
     logger.info('Connexion à la base de données établie');
     await initializeDatabase();
-    // updates the schema
-    await migrateSchema()
     return pool;
   } catch (error) {
     logger.error('Erreur de connexion à la base de données:', error);
