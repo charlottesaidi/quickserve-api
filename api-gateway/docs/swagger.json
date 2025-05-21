@@ -868,6 +868,17 @@
         "summary": "Trouve une catégorie par slug",
         "description": "Récupérer une catégorie de services disponibles par slug",
         "operationId": "getCategoryBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Slug du service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Catégorie récupérée avec succès",
