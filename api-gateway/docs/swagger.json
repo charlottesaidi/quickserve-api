@@ -167,6 +167,10 @@
             "type": "string",
             "description": "Nom de la catégorie"
           },
+          "slug": {
+            "type": "string",
+            "description": "Nom slugifié"
+          },
           "description": {
             "type": "string",
             "description": "Description courte de la catégorie"
@@ -345,9 +349,23 @@
             "type": "string",
             "description": "Titre de la catégorie de service"
           },
+          "slug": {
+            "type": "string",
+            "description": "Titre slugifié"
+          },
           "description": {
             "type": "string",
             "description": "Description détaillée de la catégorie de service"
+          },
+          "faq": {
+            "type": "array",
+            "format": "array<{question:string, answer:string}>",
+            "description": "Liste des features"
+          },
+          "features": {
+            "type": "array",
+            "format": "array<string>",
+            "description": "Liste des questions-réponses de la catégorie"
           },
           "base_price": {
             "type": "number",

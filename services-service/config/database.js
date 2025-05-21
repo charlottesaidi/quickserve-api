@@ -18,10 +18,11 @@ async function initializeDatabase() {
       CREATE TABLE IF NOT EXISTS service_categories (
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
+        slug VARCHAR(100) NOT NULL,
         description TEXT,
         full_description TEXT,
         features JSONB,
-        full_description JSONB,
+        faq JSONB,
         base_price DECIMAL(10, 2) NOT NULL,
         image_url TEXT,
         active BOOLEAN DEFAULT true,
