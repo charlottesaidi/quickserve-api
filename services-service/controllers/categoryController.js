@@ -12,8 +12,8 @@ class CategoryController {
 
   async getCategoryBySlug(req, res, next) {
     try {
-      const categories = await CategoryModel.getCategoryBySlug(req.params.slug);
-      res.status(200).json({ categories });
+      const category = await CategoryModel.getCategoryBySlug(req.params.slug);
+      res.status(200).json(category);
     } catch (error) {
       next(error);
     }
