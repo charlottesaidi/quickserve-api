@@ -169,12 +169,26 @@
           },
           "description": {
             "type": "string",
-            "description": "Description de la catégorie"
+            "description": "Description courte de la catégorie"
+          },
+          "full_description": {
+            "type": "string",
+            "description": "Description complete de la catégorie"
+          },
+          "faq": {
+            "type": "array",
+            "format": "array<{question:string, answer:string}>",
+            "description": "Liste des features"
+          },
+          "features": {
+            "type": "array",
+            "format": "array<string>",
+            "description": "Liste des questions-réponses de la catégorie"
           },
           "base_price": {
             "type": "number",
             "format": "float",
-            "description": "Prix de base pour cette catégorie de service"
+            "description": "Prix de base (minimal) pour cette catégorie de service"
           },
           "image_url": {
             "type": "string",
