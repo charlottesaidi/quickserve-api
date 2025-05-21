@@ -6,20 +6,28 @@ class CategoryModel {
     try {
       const { 
         name, 
-        description, 
-        base_price, 
+        slug,
+        description,
+        full_description,
+        features,
+        faq,
+        base_price,
         image_url, 
         active, 
       } = categoryData;
       
       const result = await pool.query(
         `INSERT INTO service_categories 
-         (name, description, base_price, image_url, active)
-         VALUES ($1, $2, $3, $4, $5)
+         (name, slug, description, full_description, features, faq, base_price, image_url, active)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
          RETURNING *`,
         [
           name,
+          slug,
           description,
+          full_description,
+          features,
+          faq,
           base_price,
           image_url,
           active,
