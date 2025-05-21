@@ -8,7 +8,7 @@ async function migrateSchema() {
     // Ajout des colonnes à service_categories si elles n'existent pas
     await pool.query(`
       ALTER TABLE service_categories 
-        ADD COLUMN IF NOT EXISTS slug VARCHAR(100) NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS slug VARCHAR(100) NOT NULL UNIQUE DEFAULT '',
         ADD COLUMN IF NOT EXISTS full_description TEXT,
         ADD COLUMN IF NOT EXISTS features JSONB,
         ADD COLUMN IF NOT EXISTS faq JSONB;

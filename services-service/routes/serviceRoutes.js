@@ -9,6 +9,7 @@ const router = express.Router();
 
 // Routes pour les catégories de services
 router.get('/categories', categoryController.getAllCategories);
+router.get('/categories/:slug', categoryController.getCategoryBySlug);
 router.post('/categories', authenticateToken, categoryController.createCategory);
 
 // Routes pour les prestations

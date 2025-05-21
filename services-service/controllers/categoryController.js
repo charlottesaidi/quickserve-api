@@ -10,6 +10,15 @@ class CategoryController {
     }
   }
 
+  async getCategoryBySlug(req, res, next) {
+    try {
+      const categories = await CategoryModel.getCategoryBySlug();
+      res.status(200).json({ categories });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async createCategory(req, res, next) {
     try {
       const {

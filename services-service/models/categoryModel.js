@@ -4,20 +4,20 @@ const logger = require('../utils/logger');
 class CategoryModel {
   async createCategory(categoryData) {
     try {
-      const { 
-        name, 
+      const {
+        name,
         slug,
         description,
         full_description,
         features,
         faq,
         base_price,
-        image_url, 
-        active, 
+        image_url,
+        active,
       } = categoryData;
-      
+
       const result = await pool.query(
-        `INSERT INTO service_categories 
+        `INSERT INTO service_categories
          (name, slug, description, full_description, features, faq, base_price, image_url, active)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
          RETURNING *`,
@@ -33,9 +33,9 @@ class CategoryModel {
           active,
         ],
       );
-      
+
       const category = result.rows[0];
-      
+
       return category;
     } catch (error) {
       logger.error('Erreur lors de la création de la catégorie de prestation:', error);
@@ -56,12 +56,25 @@ class CategoryModel {
     }
   }
 
+  async getCategoryBySlug(categorySlug) {
+    try {
+      const result = await pool.query(
+        'SELECT * FROM service_categories WHERE active = true AND slug = $1 ORDER BY name',
+        [categorySlug]
+      );
+      return result.rows[0];
+    } catch (error) {
+      logger.error('Erreur lors de la récupération des catégories:', error);
+      throw error;
+    }
+  }
+
   // Récupérer une catégorie par son ID
   async getCategoryById(categoryId) {
     try {
       const result = await pool.query(
         'SELECT * FROM service_categories WHERE id = $1 AND active = true',
-        [categoryId],
+        [categoryId]
       );
       return result.rows[0];
     } catch (error) {
