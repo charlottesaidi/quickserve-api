@@ -860,6 +860,33 @@
         }
       }
     },
+    "/categories/{slug}": {
+      "get": {
+        "tags": [
+          "Catégories"
+        ],
+        "summary": "Trouve une catégorie par slug",
+        "description": "Récupérer une catégorie de services disponibles par slug",
+        "operationId": "getCategoryBySlug",
+        "responses": {
+          "200": {
+            "description": "Catégorie récupérée avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "category": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/services": {
       "post": {
         "tags": [
