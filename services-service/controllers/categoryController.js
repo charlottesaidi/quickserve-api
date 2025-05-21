@@ -12,7 +12,7 @@ class CategoryController {
 
   async getCategoryBySlug(req, res, next) {
     try {
-      const categories = await CategoryModel.getCategoryBySlug();
+      const categories = await CategoryModel.getCategoryBySlug(req.params.slug);
       res.status(200).json({ categories });
     } catch (error) {
       next(error);

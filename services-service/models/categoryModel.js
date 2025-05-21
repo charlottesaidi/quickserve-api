@@ -59,7 +59,7 @@ class CategoryModel {
   async getCategoryBySlug(categorySlug) {
     try {
       const result = await pool.query(
-        'SELECT * FROM service_categories WHERE active = true AND slug = $1 ORDER BY name',
+        'SELECT * FROM service_categories WHERE active = true AND slug = $1',
         [categorySlug]
       );
       return result.rows[0];
