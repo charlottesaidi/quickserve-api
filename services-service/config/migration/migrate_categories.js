@@ -5,6 +5,7 @@ async function migrateSchema() {
   try {
     logger.info('Démarrage de la migration du schéma de la base de données...');
 
+    await pool.query('DELETE FROM service_categories');
     // Ajout des colonnes à service_categories si elles n'existent pas
     await pool.query(`
       ALTER TABLE service_categories 
