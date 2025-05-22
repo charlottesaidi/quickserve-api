@@ -7,12 +7,8 @@ class ServiceController {
   async createService(req, res, next) {
     try {
       const { 
-        category_id, 
-        title, 
-        description, 
-        address, 
-        latitude, 
-        longitude, 
+        category_id,
+        payment_status,
         scheduled_at, 
       } = req.body;
       
@@ -27,13 +23,11 @@ class ServiceController {
       const serviceData = {
         client_id: req.user.id,
         category_id,
-        title,
-        description,
-        address,
-        latitude,
-        longitude,
         payment_amount: category.base_price,
         scheduled_at,
+        payment_status,
+        address: "123 rue qui ne sait pas",
+        title: "Service"
       };
       
       const service = await ServiceModel.createService(serviceData);
