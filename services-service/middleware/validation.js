@@ -1,22 +1,15 @@
 // Middleware de validation pour la création de service
 function validateCreateService(req, res, next) {
   const { 
-    category_id, 
-    title, 
-    description, 
-    address, 
-    latitude, 
-    longitude, 
+    category_id,
   } = req.body;
   
   // Valider la présence des champs obligatoires
-  if (!category_id || !title || !address) {
+  if (!category_id) {
     return res.status(400).json({ 
       message: 'Données invalides', 
       errors: {
-        category_id: category_id ? undefined : 'La catégorie est requise',
-        title: title ? undefined : 'Le titre est requis',
-        address: address ? undefined : 'L\'adresse est requise',
+        category_id: category_id === undefined ? undefined : 'La catégorie est requise',
       },
     });
   }
@@ -26,17 +19,6 @@ function validateCreateService(req, res, next) {
     return res.status(400).json({ 
       message: 'Données invalides', 
       errors: { category_id: 'La catégorie doit être un nombre' }, 
-    });
-  }
-  
-  // Valider les coordonnées si fournies
-  if ((latitude && isNaN(parseFloat(latitude))) || (longitude && isNaN(parseFloat(longitude)))) {
-    return res.status(400).json({ 
-      message: 'Données invalides', 
-      errors: {
-        latitude: latitude && isNaN(parseFloat(latitude)) ? 'La latitude doit être un nombre' : undefined,
-        longitude: longitude && isNaN(parseFloat(longitude)) ? 'La longitude doit être un nombre' : undefined,
-      },
     });
   }
   
