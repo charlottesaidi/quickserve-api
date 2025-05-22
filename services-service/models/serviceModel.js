@@ -11,30 +11,23 @@ class ServiceModel {
         client_id, 
         category_id, 
         title, 
-        description, 
-        address, 
-        latitude, 
-        longitude, 
-        payment_amount, 
-        scheduled_at, 
+        address,
+        payment_status,
+        scheduled_at,
       } = serviceData;
       
       const result = await pool.query(
         `INSERT INTO services 
-         (client_id, category_id, title, description, address, latitude, longitude, status, payment_status, payment_amount, scheduled_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+         (client_id, category_id, title, address, status, payment_status, scheduled_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
          RETURNING *`,
         [
           client_id,
           category_id,
           title,
-          description,
           address,
-          latitude,
-          longitude,
           'pending',
-          'pending',
-          payment_amount,
+          payment_status,
           scheduled_at ? new Date(scheduled_at) : null,
         ],
       );
@@ -48,7 +41,6 @@ class ServiceModel {
           service_id: service.id,
           client_id: service.client_id,
           category_id: service.category_id,
-          amount: service.payment_amount,
         },
       });
       
