@@ -15,7 +15,7 @@
       "description": "Serveur de développement local"
     },
     {
-      "url": "https://api.alexis-mouchon.fr/api",
+      "url": "https://quickserve.api.alexis-mouchon.fr/api",
       "description": "Serveur de production"
     }
   ],
